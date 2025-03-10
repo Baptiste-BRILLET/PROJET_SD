@@ -9,7 +9,7 @@ export default class niveau1 extends Phaser.Scene {
   }
   preload() {
   }
-//trtrtq
+//trtrtqvfjioh"obn"ôb
   create() {
     fct.doNothing();
     fct.doAlsoNothing();
