@@ -25,8 +25,8 @@ export default class General extends Phaser.Scene {
     this.load.image("Phaser_TileSet", "src/assets/TileSet_VF.png");
     this.load.tilemapTiledJSON("carte", "src/assets/MapGeneral.json");
 
-    this.load.spritesheet("img_perso", "src/assets/dude.png", {
-      frameWidth: 32,
+    this.load.spritesheet("img_perso", "src/assets/Perso.png", {
+      frameWidth: 48,
       frameHeight: 48
     });
   }
@@ -104,25 +104,26 @@ export default class General extends Phaser.Scene {
       "Legume",
       tileset
     );
+
     // définition des tuiles de plateformes qui sont solides
-
-    const objects = [Eau, Sable, BordSable, Chemin, Arbres, Foret, Riviere, BordRiviere, Batiment, Ponton, Potager, Legume];
-
+    const objects = [Eau, Sable, BordSable, Chemin, Arbres, Foret, Riviere, BordRiviere, Ponton, Batiment, Potager, Legume];
     objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
-
-
+  
     /****************************
      *  CREATION DU PERSONNAGE  *
      ****************************/
 
     // On créée un nouveeau personnage : player
-    player = this.physics.add.sprite(300, 400, "img_perso");
+    player = this.physics.add.sprite(1500, 1500, "img_perso");
 
     //  propriétées physiqyes de l'objet player :
     player.setBounce(0.2); // on donne un petit coefficient de rebond
     player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
-
+    player.setSize(16,16);
+    player.setOffset(16,16);
+    //player.setScale(1.5)
+    
     /***************************
      *  CREATION DES ANIMATIONS *
      ****************************/
@@ -170,6 +171,8 @@ export default class General extends Phaser.Scene {
 
     //  Collide the player and the groupe_etoiles with the groupe_plateformes
     this.physics.add.collider(player, objects);
+
+    
   }
 
   /***********************************************************************/
@@ -205,7 +208,12 @@ export default class General extends Phaser.Scene {
         player.anims.play("anim_face");
     }
 
-
+ // redimentionnement du monde avec les dimensions calculées via tiled
+ this.physics.world.setBounds(0, 0, 3200, 3200);
+ //  ajout du champs de la caméra de taille identique à celle du monde
+ this.cameras.main.setBounds(0, 0, 3200, 3200);
+ // ancrage de la caméra sur le joueur
+ this.cameras.main.startFollow(player);
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
       if (this.physics.overlap(player, this.porte1))
