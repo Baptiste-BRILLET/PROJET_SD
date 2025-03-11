@@ -68,6 +68,10 @@ export default class General extends Phaser.Scene {
       "BordSable",
       tileset
     );
+    const Terre = CarteGeneralWord.createLayer(
+      "Terre",
+      tileset
+    );
     const Chemin = CarteGeneralWord.createLayer(
       "Chemin",
       tileset
@@ -106,7 +110,7 @@ export default class General extends Phaser.Scene {
     );
 
     // définition des tuiles de plateformes qui sont solides
-    const objects = [Eau, Sable, BordSable, Chemin, Arbres, Foret, Riviere, BordRiviere, Ponton, Batiment, Potager, Legume];
+    const objects = [Eau, Sable, BordSable, Terre,Chemin, Arbres, Foret, Riviere, BordRiviere, Ponton, Batiment, Potager, Legume];
     objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
   
@@ -208,7 +212,7 @@ export default class General extends Phaser.Scene {
         player.anims.play("anim_face");
     }
 
- // redimentionnement du monde avec les dimensions calculées via tiled
+    // redimentionnement du monde avec les dimensions calculées via tiled
  this.physics.world.setBounds(0, 0, 3200, 3200);
  //  ajout du champs de la caméra de taille identique à celle du monde
  this.cameras.main.setBounds(0, 0, 3200, 3200);
