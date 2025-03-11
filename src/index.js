@@ -4,6 +4,7 @@ import niveau1 from "/src/js/niveau1.js";
 import niveau2 from "/src/js/niveau2.js";
 import niveau3 from "/src/js/niveau3.js";
 import menu from "/src/js/menu.js";
+import menu from "/src/js/General.js";
 
 // configuration générale du jeu
 var config = {
@@ -21,12 +22,12 @@ var config = {
     arcade: {
       // parametres du mode arcade
       gravity: {
-        y: 300 // gravité verticale : acceleration ddes corps en pixels par seconde
+        y: 0 // gravité verticale : acceleration ddes corps en pixels par seconde
       },
       debug: true // permet de voir les hitbox et les vecteurs d'acceleration quand mis à true
     }
   },
-  scene: [menu, selection, niveau1, niveau2, niveau3]
+  scene: [General, menu, selection, niveau1, niveau2, niveau3]
 };
 
 // création et lancement du jeu

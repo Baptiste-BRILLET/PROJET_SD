@@ -6,8 +6,7 @@ import * as fct from "/src/js/fonctions.js";
 
 var player; // désigne le sprite du joueur
 var clavier; // pour la gestion du clavier
-var groupe_plateformes;
-
+var scene;
 // définition de la classe "selection"
 export default class selection extends Phaser.Scene {
   constructor() {
@@ -23,16 +22,13 @@ export default class selection extends Phaser.Scene {
    * On y trouve surtout le chargement des assets (images, son ..)
    */
   preload() {
-    // tous les assets du jeu sont placés dans le sous-répertoire src/assets/
-    this.load.image("img_ciel", "src/assets/sky.png");
-    this.load.image("img_plateforme", "src/assets/platform.png");
+    this.load.image("Phaser_TileSet", "src/assets/TileSet_VF.png");
+    this.load.tilemapTiledJSON("carte", "src/assets/mairie.json");
+
     this.load.spritesheet("img_perso", "src/assets/dude.png", {
       frameWidth: 32,
       frameHeight: 48
     });
-    this.load.image("img_porte1", "src/assets/door1.png");
-    this.load.image("img_porte2", "src/assets/door2.png");
-    this.load.image("img_porte3", "src/assets/door3.png");
   }
 
   /***********************************************************************/
@@ -46,48 +42,79 @@ export default class selection extends Phaser.Scene {
    * ainsi que toutes les instructions permettant de planifier des evenements
    */
   create() {
-      fct.doNothing();
-      fct.doAlsoNothing();
-
+    fct.doNothing();
+    fct.doAlsoNothing();
     /*************************************
-     *  CREATION DU MONDE + PLATEFORMES  *
+     *  CREATION DU MONDE  *
      *************************************/
+    scene = this;
+    const CarteGeneral = this.add.tilemap("carte");
 
-    // On ajoute une simple image de fond, le ciel, au centre de la zone affichée (400, 300)
-    // Par défaut le point d'ancrage d'une image est le centre de cette derniere
-    this.add.image(400, 300, "img_ciel");
+    // chargement du jeu de tuiles
+    const tileset = CarteGeneral.addTilesetImage(
+      "TileSet_VF",
+      "Phaser_TileSet"
+    );
+    // chargement de chaque calque
+    const plancher = CarteGeneral.createLayer(
+      "plancher",
+      tileset
+    );
+    const mur = CarteGeneral.createLayer(
+      "mur",
+      tileset
+    );
+    const mur2 = CarteGeneral.createLayer(
+      "mur2",
+      tileset
+    );
+    const escalier = CarteGeneral.createLayer(
+      "escalier",
+      tileset
+    );
+    const Calque_de_Tuiles_7 = CarteGeneral.createLayer(
+      "solsup",
+      tileset
+    );
+    const escalier2 = CarteGeneral.createLayer(
+      "escalier2",
+      tileset
+    );
+    const fenetre2 = CarteGeneral.createLayer(
+      "fenetre2",
+      tileset
+    );
+    const tapis = CarteGeneral.createLayer(
+      "tapisbis",
+      tileset
+    );
+    const meuble = CarteGeneral.createLayer(
+      "meuble",
+      tileset
+    );
+    const tapis2 = CarteGeneral.createLayer(
+      "tapis",
+      tileset
+    );
+    const objet = CarteGeneral.createLayer(
+      "objet",
+      tileset
+    );
 
-    // la création d'un groupes permet de gérer simultanément les éléments d'une meme famille
-    //  Le groupe groupe_plateformes contiendra le sol et deux platesformes sur lesquelles sauter
-    // notez le mot clé "staticGroup" : le static indique que ces élements sont fixes : pas de gravite,
-    // ni de possibilité de les pousser.
-    groupe_plateformes = this.physics.add.staticGroup();
-    // une fois le groupe créé, on va créer les platesformes , le sol, et les ajouter au groupe groupe_plateformes
+    // définition des tuiles de plateformes qui sont solides
 
-    // l'image img_plateforme fait 400x32. On en met 2 à coté pour faire le sol
-    // la méthode create permet de créer et d'ajouter automatiquement des objets à un groupe
-    // on précise 2 parametres : chaque coordonnées et la texture de l'objet, et "voila!"
-    groupe_plateformes.create(200, 584, "img_plateforme");
-    groupe_plateformes.create(600, 584, "img_plateforme");
+    const objects = [plancher, mur, mur2, escalier, Calque_de_Tuiles_7, escalier2, fenetre2, tapis, meuble, tapis2, objet];
 
-    //  on ajoute 3 platesformes flottantes
-    groupe_plateformes.create(600, 450, "img_plateforme");
-    groupe_plateformes.create(50, 300, "img_plateforme");
-    groupe_plateformes.create(750, 270, "img_plateforme");
+    objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
-    /****************************
-     *  Ajout des portes   *
-     ****************************/
-    this.porte1 = this.physics.add.staticSprite(600, 414, "img_porte1");
-    this.porte2 = this.physics.add.staticSprite(50, 264, "img_porte2");
-    this.porte3 = this.physics.add.staticSprite(750, 234, "img_porte3");
+
 
     /****************************
      *  CREATION DU PERSONNAGE  *
      ****************************/
 
     // On créée un nouveeau personnage : player
-    player = this.physics.add.sprite(100, 450, "img_perso");
+    player = this.physics.add.sprite(300, 400, "img_perso");
 
     //  propriétées physiqyes de l'objet player :
     player.setBounce(0.2); // on donne un petit coefficient de rebond
@@ -139,7 +166,7 @@ export default class selection extends Phaser.Scene {
      ******************************************************/
 
     //  Collide the player and the groupe_etoiles with the groupe_plateformes
-    this.physics.add.collider(player, groupe_plateformes);
+    this.physics.add.collider(player, objects);
   }
 
   /***********************************************************************/
@@ -147,21 +174,35 @@ export default class selection extends Phaser.Scene {
 /***********************************************************************/
 
   update() {
-    
+
     if (clavier.left.isDown) {
       player.setVelocityX(-160);
       player.anims.play("anim_tourne_gauche", true);
+
     } else if (clavier.right.isDown) {
       player.setVelocityX(160);
       player.anims.play("anim_tourne_droite", true);
     } else {
       player.setVelocityX(0);
-      player.anims.play("anim_face");
+      if (player.body.velocity.y == 0)
+        player.anims.play("anim_face");
     }
 
-    if (clavier.up.isDown && player.body.touching.down) {
-      player.setVelocityY(-330);
+    if (clavier.up.isDown) {
+      player.setVelocityY(-160);
+      player.anims.play("anim_face", true);
     }
+    else if (clavier.down.isDown) {
+      player.setVelocityY(160);
+      player.anims.play("anim_face", true);
+    }
+    else {
+      player.setVelocityY(0);
+      if (player.body.velocity.x == 0)
+        player.anims.play("anim_face");
+    }
+
+
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
       if (this.physics.overlap(player, this.porte1))

@@ -6,8 +6,10 @@ export default class niveau1 extends Phaser.Scene {
     });
   }
   preload() {
+    this.load.image("Phaser_TileSet", "src/assets/TileSet_VF.png");
+    this.load.tilemapTiledJSON("carte", "src/assets/mairie.json");
   }
-//Ajout de la map mairie
+
   create() {
     fct.doNothing();
     fct.doAlsoNothing();
