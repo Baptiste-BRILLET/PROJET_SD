@@ -7,7 +7,7 @@ export default class niveau1 extends Phaser.Scene {
   }
   preload() {
   }
-//A
+//Ajout de la map mairie
   create() {
     fct.doNothing();
     fct.doAlsoNothing();
