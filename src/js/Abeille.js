@@ -11,68 +11,48 @@ export default class Abeille extends Phaser.Scene {
   }
 
   create() {
-    this.game.config.physics.arcade.gravity.y = 300;
+    //this.game.config.physics.arcade.gravity.y = 300;
     //console.log(this.game.config.physics.arcade.gravity);
-    const CarteMairie = this.add.tilemap("carteMairie");
-
+    const CarteAbeille = this.add.tilemap("carteAbeille");
     // chargement du jeu de tuiles
-    const tileset = CarteMairie.addTilesetImage(
+    const tileset = CarteAbeille.addTilesetImage(
       "TileSet_VF",
       "Phaser_TileSet"
     );
     // chargement de chaque calque
-    const plancher = CarteMairie.createLayer(
-      "plancher",
+    const Fond = CarteAbeille.createLayer(
+      "Fond",
       tileset
     );
-    const mur = CarteMairie.createLayer(
-      "mur",
+    const FondTerre = CarteAbeille.createLayer(
+      "FondTerre",
       tileset
     );
-    const mur2 = CarteMairie.createLayer(
-      "mur2",
+    const FondArbre = CarteAbeille.createLayer(
+      "FondArbre",
       tileset
     );
-    const escalier = CarteMairie.createLayer(
-      "escalier",
+    const Foret = CarteAbeille.createLayer(
+      "Foret",
       tileset
     );
-    const Calque_de_Tuiles_7 = CarteMairie.createLayer(
-      "solsup",
+    const Trou = CarteAbeille.createLayer(
+      "Trou",
       tileset
     );
-    const escalier2 = CarteMairie.createLayer(
-      "escalier2",
+    const Plateforme = CarteAbeille.createLayer(
+      "Plateforme",
       tileset
     );
-    const fenetre2 = CarteMairie.createLayer(
-      "fenetre2",
+    const Arbre = CarteAbeille.createLayer(
+      "Arbre",
       tileset
     );
-    const tapis = CarteMairie.createLayer(
-      "tapisbis",
-      tileset
-    );
-    const meuble = CarteMairie.createLayer(
-      "meuble",
-      tileset
-    );
-    const tapis2 = CarteMairie.createLayer(
-      "tapis",
-      tileset
-    );
-    const objet = CarteMairie.createLayer(
-      "objet",
-      tileset
-    );
-
+  
     // définition des tuiles de plateformes qui sont solides
-
-    const objects = [plancher, mur, mur2, escalier, Calque_de_Tuiles_7, escalier2, fenetre2, tapis, meuble, tapis2, objet];
-
-    //objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
-
-
+    const objects = [Fond, FondTerre, FondArbre, Foret, Trou, Plateforme, Arbre];
+    objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
+  
   }
 
   update() {

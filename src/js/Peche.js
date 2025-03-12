@@ -6,9 +6,10 @@ export default class Peche extends Phaser.Scene {
     });
   }
   preload() {
-    this.load.image("Phaser_TileSet", "src/assets/TileSet_VF.png");
+    this.load.image("Phaser_TileSet_Peche", "src/assets/TileSet_VF.png");
     this.load.tilemapTiledJSON("cartePeche", "src/assets/peche.json");
   }
+
 
   create() {
     const CartePeche = this.add.tilemap("cartePeche");
@@ -16,7 +17,7 @@ export default class Peche extends Phaser.Scene {
     // chargement du jeu de tuiles
     const tileset = CartePeche.addTilesetImage(
       "TileSet_VF",
-      "Phaser_TileSet"
+      "Phaser_TileSet_Peche"
     );
     // chargement de chaque calque
     const fond = CartePeche.createLayer(
@@ -62,9 +63,31 @@ export default class Peche extends Phaser.Scene {
     this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
     this.player.setSize(16, 16);
     this.player.setOffset(16, 16);
+
+    /***********************
+     *  CREATION DU CLAVIER *
+     ************************/
+    // ceci permet de creer un clavier et de mapper des touches, connaitre l'état des touches
+    this.clavier = this.input.keyboard.createCursorKeys();
+
+    /*****************************************************
+     *  GESTION DES INTERATIONS ENTRE  GROUPES ET ELEMENTS *
+     ******************************************************/
+
+    //  Collide the player and the groupe_etoiles with the groupe_plateformes
+    this.physics.add.collider(this.player, objects);
   }
 
   update() {
+    // Gestion du clavier
+    this.clavier = this.input.keyboard.createCursorKeys();
+    this.keys = this.input.keyboard.addKeys({
+      up: Phaser.Input.Keyboard.KeyCodes.Z, //Touche Z pour avancer
+      down: Phaser.Input.Keyboard.KeyCodes.S, //Touche S pour reculer
+      left: Phaser.Input.Keyboard.KeyCodes.Q, //Touche Q pour aller à gauche
+      right: Phaser.Input.Keyboard.KeyCodes.D //Touche D pour aller à droite
+    });
+
     if (this.keys.left.isDown) {
       this.player.setVelocityX(-160);
       this.player.anims.play("anim_gauche", true);

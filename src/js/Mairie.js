@@ -1,5 +1,4 @@
 export default class Mairie extends Phaser.Scene {
-
   // constructeur de la classe
   constructor() {
     super({
