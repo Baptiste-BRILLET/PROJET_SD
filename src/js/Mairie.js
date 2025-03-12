@@ -22,7 +22,8 @@ export default class Mairie extends Phaser.Scene {
    * ainsi que toutes les instructions permettant de planifier des evenements
    */
   create() {
-    
+    //this.game.config.type.width = 600;
+    //this.game.config.type.height = 600;
     /*************************************
      *  CREATION DU MONDE  *
      *************************************/
@@ -82,7 +83,6 @@ export default class Mairie extends Phaser.Scene {
     // définition des tuiles de plateformes qui sont solides
  
     const objects = [plancher, mur, mur2, escalier, Calque_de_Tuiles_7, escalier2, fenetre2, tapis, meuble, tapis2, objet];
- 
     objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
 
@@ -137,7 +137,7 @@ export default class Mairie extends Phaser.Scene {
      *  CREATION DU CLAVIER *
      ************************/
     // ceci permet de creer un clavier et de mapper des touches, connaitre l'état des touches
-    clavier = this.input.keyboard.createCursorKeys();
+    this.clavier = this.input.keyboard.createCursorKeys();
  
     /*****************************************************
      *  GESTION DES INTERATIONS ENTRE  GROUPES ET ELEMENTS *

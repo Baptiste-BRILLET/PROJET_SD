@@ -11,10 +11,10 @@ export default class Abeille extends Phaser.Scene {
   }
 
   create() {
-this.game.config.physics.arcade.gravity.y = 300;
-console.log(this.game.config.physics.arcade.gravity);
+    this.game.config.physics.arcade.gravity.y = 300;
+    //console.log(this.game.config.physics.arcade.gravity);
     const CarteMairie = this.add.tilemap("carteMairie");
- 
+
     // chargement du jeu de tuiles
     const tileset = CarteMairie.addTilesetImage(
       "TileSet_VF",
@@ -65,11 +65,11 @@ console.log(this.game.config.physics.arcade.gravity);
       "objet",
       tileset
     );
- 
+
     // définition des tuiles de plateformes qui sont solides
- 
+
     const objects = [plancher, mur, mur2, escalier, Calque_de_Tuiles_7, escalier2, fenetre2, tapis, meuble, tapis2, objet];
- 
+
     //objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
 
