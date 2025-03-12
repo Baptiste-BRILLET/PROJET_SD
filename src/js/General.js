@@ -59,10 +59,21 @@ export default class General extends Phaser.Scene {
 
 
     //Image Quetes
-    this.load.image("questImage", "src/assets/Quete/Quete.png"); // Image de la quête
-    this.load.image("playButton", "src/assets/Quete/Play.png"); // Bouton Play
-    this.load.image("quitButton", "src/assets/Quete/Exit.png"); // Bouton Quit
-  
+    this.load.image("questImage1", "src/assets/Quete/Quete1.png"); // Image de la quête 1
+    this.load.image("questImage2", "src/assets/Quete/Quete2.png"); // Image de la quête 2
+    this.load.image("questImage3", "src/assets/Quete/Quete3.png"); // Image de la quête 3
+    this.load.image("questImage4", "src/assets/Quete/Quete4.png"); // Image de la quête 4
+    this.load.image("playButton1", "src/assets/Quete/Play1.png"); // Bouton Play 1
+    this.load.image("playButton2", "src/assets/Quete/Play2.png"); // Bouton Play 2
+    this.load.image("playButton3", "src/assets/Quete/Play3.png"); // Bouton Play 3
+    this.load.image("playButton4", "src/assets/Quete/Play4.png"); // Bouton Play 4
+    this.load.image("quitButton1", "src/assets/Quete/Exit1.png"); // Bouton Quit 1
+    this.load.image("quitButton2", "src/assets/Quete/Exit2.png"); // Bouton Quit 2
+    this.load.image("quitButton3", "src/assets/Quete/Exit3.png"); // Bouton Quit 3
+    this.load.image("quitButton4", "src/assets/Quete/Exit4.png"); // Bouton Quit 4
+
+
+
   }
 
   /***********************************************************************/
@@ -102,12 +113,12 @@ export default class General extends Phaser.Scene {
       "Sable",
       tileset
     );
-    
+
     const BordSable = CarteGeneralWord.createLayer(
       "BordSable",
       tileset
     );
-    
+
     const Terre = CarteGeneralWord.createLayer(
       "Terre",
       tileset
@@ -255,8 +266,13 @@ export default class General extends Phaser.Scene {
 
     // Ajout de la hitbox du PNJ
     this.physics.add.overlap(player, PNJMairie, this.showQuestUI, null, this);
+    // Ajout de la hitbox du PNJ
+    this.physics.add.overlap(player, Pecheur, this.showQuestUI, null, this);
+    // Ajout de la hitbox du PNJ
+    this.physics.add.overlap(player, PNJ_Bucheron, this.showQuestUI, null, this);
+    // Ajout de la hitbox du PNJ
+    this.physics.add.overlap(player, PNJ_Miel, this.showQuestUI, null, this);
 
-    
     /***********************
      *  CREATION DU CLAVIER *
      ************************/
@@ -272,13 +288,13 @@ export default class General extends Phaser.Scene {
     this.cameras.main.roundPixels = true;
 
     /*****************************************************
-     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ *
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ (Maire) *
      ******************************************************/
 
     // Création de l'image de quête, invisible par défaut
-    this.questImage = this.add.image(1460, 1780, "questImage").setVisible(false);
-    this.playButton = this.add.image(1420, 1780, "playButton").setVisible(false).setInteractive();
-    this.quitButton = this.add.image(1480, 1780, "quitButton").setVisible(false).setInteractive();
+    this.questImage = this.add.image(1460, 1780, "questImage1").setVisible(false);
+    this.playButton = this.add.image(1400, 1800, "playButton1").setVisible(false).setInteractive();
+    this.quitButton = this.add.image(1480, 1780, "quitButton1").setVisible(false).setInteractive();
 
     this.playButton.on("pointerdown", () => {
       this.scene.start("mairie"); // Change de scène
@@ -287,8 +303,56 @@ export default class General extends Phaser.Scene {
       this.hideQuestUI(); // Cache l'interface
     });
 
+    /*****************************************************
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ (Pacheur) *
+     ******************************************************/
+
+    // Création de l'image de quête, invisible par défaut
+    this.questImage = this.add.image(2150, 1400, "questImage2").setVisible(false);
+    this.playButton = this.add.image(2100, 1500, "playButton2").setVisible(false).setInteractive();
+    this.quitButton = this.add.image(2200, 1500, "quitButton2").setVisible(false).setInteractive();
+
+    this.playButton.on("pointerdown", () => {
+      this.scene.start("Peche"); // Change de scène
+    });
+    this.quitButton.on("pointerdown", () => {
+      this.hideQuestUI(); // Cache l'interface
+    });
+
+    /*****************************************************
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ (Bucheron)*
+     ******************************************************/
+
+    // Création de l'image de quête, invisible par défaut
+    this.questImage = this.add.image(900, 1500, "questImage3").setVisible(false);
+    this.playButton = this.add.image(850, 1400, "playButton3").setVisible(false).setInteractive();
+    this.quitButton = this.add.image(950, 1600, "quitButton3").setVisible(false).setInteractive();
+
+    //On ne veux pas changer de scène mais juste afficher en plus un élément sur la map
+    this.playButton.on("pointerdown", () => {
+      this.scene.start("mairie"); // Change de scène
+    });
+    this.quitButton.on("pointerdown", () => {
+      this.hideQuestUI(); // Cache l'interface
+    });
+
+    /*****************************************************
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ (Miel) *
+     ******************************************************/
+
+    // Création de l'image de quête, invisible par défaut
+    this.questImage = this.add.image(1300, 2100, "questImage4").setVisible(false);
+    this.playButton = this.add.image(1250, 2200, "playButton4").setVisible(false).setInteractive();
+    this.quitButton = this.add.image(1150, 2000, "quitButton4").setVisible(false).setInteractive();
+
+    this.playButton.on("pointerdown", () => {
+      this.scene.start("Abeille"); // Change de scène
+    });
+    this.quitButton.on("pointerdown", () => {
+      this.hideQuestUI(); // Cache l'interface
+    });
   }
-/***********************************************************************/
+  /***********************************************************************/
   /** FONCTION ShowQuestUI
 /***********************************************************************/
   showQuestUI() {
@@ -296,7 +360,7 @@ export default class General extends Phaser.Scene {
     this.playButton.setVisible(true);
     this.quitButton.setVisible(true);
   }
-/***********************************************************************/
+  /***********************************************************************/
   /** FONCTION HideQuestUI 
 /***********************************************************************/
   hideQuestUI() {
@@ -355,6 +419,18 @@ export default class General extends Phaser.Scene {
 
     // Interaction pour la quetes
     if (this.physics.overlap(player, PNJMairie)) {
+      this.showQuestUI();
+    }
+    // Interaction pour la quetes
+    if (this.physics.overlap(player, Pecheur)) {
+      this.showQuestUI();
+    }
+    // Interaction pour la quetes
+    if (this.physics.overlap(player, PNJ_Bucheron)) {
+      this.showQuestUI();
+    }
+    // Interaction pour la quetes
+    if (this.physics.overlap(player, PNJ_Miel)) {
       this.showQuestUI();
     }
 
