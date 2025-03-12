@@ -20,42 +20,26 @@ export default class Peche extends Phaser.Scene {
       "Phaser_TileSet_Peche"
     );
     // chargement de chaque calque
-    const fond = CartePeche.createLayer(
-      "fond",
+    const Fond = CartePeche.createLayer(
+      "Fond",
       tileset
     );
     // chargement de chaque calque
-    const bord = CartePeche.createLayer(
-      "bord",
+    const Herbe = CartePeche.createLayer(
+      "Herbe",
       tileset
     );
     // chargement de chaque calque
-    const pont = CartePeche.createLayer(
-      "pont",
+    const Accesoire = CartePeche.createLayer(
+      "Accesoire",
       tileset
     );
     // chargement de chaque calque
-    const chemin = CartePeche.createLayer(
-      "chemin",
+    const Legume = CartePeche.createLayer(
+      "Legume",
       tileset
     );
-    // chargement de chaque calque
-    const maison = CartePeche.createLayer(
-      "maison",
-      tileset
-    );
-
-    // chargement de chaque calque
-    const legume = CartePeche.createLayer(
-      "legume",
-      tileset
-    );
-    // chargement de chaque calque
-    const arbre = CartePeche.createLayer(
-      "arbre",
-      tileset
-    );
-    const objects = [fond, bord, pont, chemin, maison, legume, arbre];
+    const objects = [Fond, Herbe, Accesoire, Legume,];
     objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
     this.player = this.physics.add.sprite(200, 200, "img_perso");
