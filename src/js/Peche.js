@@ -42,7 +42,7 @@ export default class Peche extends Phaser.Scene {
     const objects = [Fond, Herbe, Accesoire, Legume,];
     objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
-    this.player = this.physics.add.sprite(200, 200, "img_perso");
+    this.player = this.physics.add.sprite(320, 620, "img_perso");
     this.player.setBounce(0.2); // on donne un petit coefficient de rebond
     this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
     this.player.setSize(16, 16);
@@ -92,6 +92,12 @@ export default class Peche extends Phaser.Scene {
     } else {
       this.player.setVelocityY(0);
     }
+    // redimentionnement du monde avec les dimensions calculées via tiled
+    this.physics.world.setBounds(0, 0, 640, 640);
+    //  ajout du champs de la caméra de taille identique à celle du monde
+    this.cameras.main.setBounds(0, 0, 640, 640);
+    // ancrage de la caméra sur le joueur
+    this.cameras.main.startFollow(this.player);
 
     // Si aucune touche n'est pressée, jouer l'animation de repos
     if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {

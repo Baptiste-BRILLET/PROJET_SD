@@ -10,13 +10,12 @@ import General from "/src/js/General.js";
 // configuration générale du jeu
 var config = {
   type: Phaser.AUTO,
-  width: 800, // largeur en pixels
-  height: 600, // hauteur en pixels
-   scale: {
-        // Or set parent divId here
+  width: 640, // Taille de base
+    height: 480, // Taille de base
+    scale: {
         mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
-   },
+        autoCenter: Phaser.Scale.CENTER_BOTH 
+    },
   physics: {
     // définition des parametres physiques
     default: "arcade", // mode arcade : le plus simple : des rectangles pour gérer les collisions. Pas de pentes
