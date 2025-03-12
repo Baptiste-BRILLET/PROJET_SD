@@ -22,12 +22,10 @@ export default class Mairie extends Phaser.Scene {
    * ainsi que toutes les instructions permettant de planifier des evenements
    */
   create() {
-    fct.doNothing();
-    fct.doAlsoNothing();
+    
     /*************************************
      *  CREATION DU MONDE  *
      *************************************/
-    scene = this;
     const CarteMairie = this.add.tilemap("carteMairie");
  
     // chargement du jeu de tuiles
@@ -90,15 +88,15 @@ export default class Mairie extends Phaser.Scene {
 
 
     /****************************
-     *  CREATION DU PERSONNAGE  *
+     *  RECUPERATION DU PERSONNAGE  *
      ****************************/
  
     // On créée un nouveeau personnage : player
-    player = this.physics.add.sprite(300, 400, "img_perso");
+    this.player = this.physics.add.sprite(300, 400, "img_perso");
  
     //  propriétées physiqyes de l'objet player :
-    player.setBounce(0.2); // on donne un petit coefficient de rebond
-    player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
+    this.player.setBounce(0.2); // on donne un petit coefficient de rebond
+    this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
  
     /***************************
      *  CREATION DES ANIMATIONS *

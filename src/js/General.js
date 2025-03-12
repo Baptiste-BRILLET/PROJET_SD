@@ -264,14 +264,6 @@ export default class General extends Phaser.Scene {
     PNJ_6 = this.physics.add.sprite(1320, 1400, "img_PNJ_6");
     PNJMairie = this.physics.add.sprite(1460, 1780, "img_PNJ3");
 
-    // Ajout de la hitbox du PNJ
-    this.physics.add.overlap(player, PNJMairie, this.showQuestUI, null, this);
-    // Ajout de la hitbox du PNJ
-    this.physics.add.overlap(player, Pecheur, this.showQuestUI, null, this);
-    // Ajout de la hitbox du PNJ
-    this.physics.add.overlap(player, PNJ_Bucheron, this.showQuestUI, null, this);
-    // Ajout de la hitbox du PNJ
-    this.physics.add.overlap(player, PNJ_Miel, this.showQuestUI, null, this);
 
     /***********************
      *  CREATION DU CLAVIER *
@@ -292,15 +284,15 @@ export default class General extends Phaser.Scene {
      ******************************************************/
 
     // Création de l'image de quête, invisible par défaut
-    this.questImage = this.add.image(1460, 1780, "questImage1").setVisible(false);
-    this.playButton = this.add.image(1400, 1800, "playButton1").setVisible(false).setInteractive();
-    this.quitButton = this.add.image(1480, 1780, "quitButton1").setVisible(false).setInteractive();
+    this.questImage1 = this.add.image(1460, 1780, "questImage1").setVisible(false);
+    this.playButton1 = this.add.image(1400, 1800, "playButton1").setVisible(false).setInteractive();
+    this.quitButton1 = this.add.image(1480, 1780, "quitButton1").setVisible(false).setInteractive();
 
-    this.playButton.on("pointerdown", () => {
-      this.scene.start("mairie"); // Change de scène
+    this.playButton1.on("pointerdown", () => {
+      this.scene.start("Mairie"); // Change de scène
     });
-    this.quitButton.on("pointerdown", () => {
-      this.hideQuestUI(); // Cache l'interface
+    this.quitButton1.on("pointerdown", () => {
+      this.hideQuestUI(this.questImage1, this.playButton1, this.quitButton1); // Cache l'interface
     });
 
     /*****************************************************
@@ -308,15 +300,15 @@ export default class General extends Phaser.Scene {
      ******************************************************/
 
     // Création de l'image de quête, invisible par défaut
-    this.questImage = this.add.image(2150, 1400, "questImage2").setVisible(false);
-    this.playButton = this.add.image(2100, 1500, "playButton2").setVisible(false).setInteractive();
-    this.quitButton = this.add.image(2200, 1500, "quitButton2").setVisible(false).setInteractive();
+    this.questImage2 = this.add.image(2150, 1400, "questImage2").setVisible(false);
+    this.playButton2 = this.add.image(2100, 1500, "playButton2").setVisible(false).setInteractive();
+    this.quitButton2 = this.add.image(2200, 1500, "quitButton2").setVisible(false).setInteractive();
 
-    this.playButton.on("pointerdown", () => {
+    this.playButton2.on("pointerdown", () => {
       this.scene.start("Peche"); // Change de scène
     });
-    this.quitButton.on("pointerdown", () => {
-      this.hideQuestUI(); // Cache l'interface
+    this.quitButton2.on("pointerdown", () => {
+      this.hideQuestUI(this.questImage2, this.playButton2, this.quitButton2); // Cache l'interface
     });
 
     /*****************************************************
@@ -324,16 +316,16 @@ export default class General extends Phaser.Scene {
      ******************************************************/
 
     // Création de l'image de quête, invisible par défaut
-    this.questImage = this.add.image(900, 1500, "questImage3").setVisible(false);
-    this.playButton = this.add.image(850, 1400, "playButton3").setVisible(false).setInteractive();
-    this.quitButton = this.add.image(950, 1600, "quitButton3").setVisible(false).setInteractive();
+    this.questImage3 = this.add.image(900, 1500, "questImage3").setVisible(false);
+    this.playButton3 = this.add.image(850, 1400, "playButton3").setVisible(false).setInteractive();
+    this.quitButton3 = this.add.image(950, 1600, "quitButton3").setVisible(false).setInteractive();
 
     //On ne veux pas changer de scène mais juste afficher en plus un élément sur la map
-    this.playButton.on("pointerdown", () => {
-      this.scene.start("mairie"); // Change de scène
+    this.playButton3.on("pointerdown", () => {
+      this.physics.add.sprite(1250, 800, "img_crabe");
     });
-    this.quitButton.on("pointerdown", () => {
-      this.hideQuestUI(); // Cache l'interface
+    this.quitButton3.on("pointerdown", () => {
+      this.hideQuestUI(this.questImage3, this.playButton3, this.quitButton3); // Cache l'interface
     });
 
     /*****************************************************
@@ -341,32 +333,32 @@ export default class General extends Phaser.Scene {
      ******************************************************/
 
     // Création de l'image de quête, invisible par défaut
-    this.questImage = this.add.image(1300, 2100, "questImage4").setVisible(false);
-    this.playButton = this.add.image(1250, 2200, "playButton4").setVisible(false).setInteractive();
-    this.quitButton = this.add.image(1150, 2000, "quitButton4").setVisible(false).setInteractive();
+    this.questImage4 = this.add.image(1300, 2100, "questImage4").setVisible(false);
+    this.playButton4 = this.add.image(1250, 2200, "playButton4").setVisible(false).setInteractive();
+    this.quitButton4 = this.add.image(1150, 2000, "quitButton4").setVisible(false).setInteractive();
 
-    this.playButton.on("pointerdown", () => {
+    this.playButton4.on("pointerdown", () => {
       this.scene.start("Abeille"); // Change de scène
     });
-    this.quitButton.on("pointerdown", () => {
-      this.hideQuestUI(); // Cache l'interface
+    this.quitButton4.on("pointerdown", () => {
+      this.hideQuestUI(this.questImage4, this.playButton4, this.quitButton4); // Cache l'interface
     });
   }
   /***********************************************************************/
   /** FONCTION ShowQuestUI
 /***********************************************************************/
-  showQuestUI() {
-    this.questImage.setVisible(true);
-    this.playButton.setVisible(true);
-    this.quitButton.setVisible(true);
+  showQuestUI(image, play, quit) {
+    image.setVisible(true);
+    play.setVisible(true);
+    quit.setVisible(true);
   }
   /***********************************************************************/
   /** FONCTION HideQuestUI 
 /***********************************************************************/
-  hideQuestUI() {
-    this.questImage.setVisible(false);
-    this.playButton.setVisible(false);
-    this.quitButton.setVisible(false);
+  hideQuestUI(image, play, quit) {
+    image.setVisible(false);
+    play.setVisible(false);
+    quit.setVisible(false);
   }
   /***********************************************************************/
   /** FONCTION UPDATE 
@@ -419,19 +411,19 @@ export default class General extends Phaser.Scene {
 
     // Interaction pour la quetes
     if (this.physics.overlap(player, PNJMairie)) {
-      this.showQuestUI();
+      this.showQuestUI(this.questImage1, this.playButton1, this.quitButton1);
     }
     // Interaction pour la quetes
     if (this.physics.overlap(player, Pecheur)) {
-      this.showQuestUI();
+      this.showQuestUI(this.questImage2, this.playButton2, this.quitButton2);
     }
     // Interaction pour la quetes
     if (this.physics.overlap(player, PNJ_Bucheron)) {
-      this.showQuestUI();
+      this.showQuestUI(this.questImage3, this.playButton3, this.quitButton3);
     }
     // Interaction pour la quetes
     if (this.physics.overlap(player, PNJ_Miel)) {
-      this.showQuestUI();
+      this.showQuestUI(this.questImage4, this.playButton4, this.quitButton4);
     }
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {

@@ -11,8 +11,8 @@ export default class Abeille extends Phaser.Scene {
   }
 
   create() {
-    
-    scene = this;
+this.game.config.physics.arcade.gravity.y = 300;
+console.log(this.game.config.physics.arcade.gravity);
     const CarteMairie = this.add.tilemap("carteMairie");
  
     // chargement du jeu de tuiles
@@ -70,7 +70,9 @@ export default class Abeille extends Phaser.Scene {
  
     const objects = [plancher, mur, mur2, escalier, Calque_de_Tuiles_7, escalier2, fenetre2, tapis, meuble, tapis2, objet];
  
-    objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
+    //objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
+
+
   }
 
   update() {
