@@ -7,6 +7,18 @@ import * as fct from "/src/js/fonctions.js";
 var player; // désigne le sprite du joueur
 var clavier; // pour la gestion du clavier
 var scene;
+var Pecheur;
+var PNJ1;
+var PNJCarrote;
+var PNJ2;
+var PNJ3;
+var PNJ_Requin;
+var PNJ_Nageur;
+var PNJ_Miel;
+var PNJ_Bucheron;
+var PNJ_4;
+var PNJ_5;
+var PNJ_6;
 // définition de la classe "selection"
 export default class General extends Phaser.Scene {
   constructor() {
@@ -30,6 +42,19 @@ export default class General extends Phaser.Scene {
       frameHeight: 48
     });
 
+    //Création PNJ
+    this.load.image("img_Pecheur", "src/assets/PNG/Pecheur.png");
+    this.load.image("img_PNJ1", "src/assets/PNG/PNJ1.png");
+    this.load.image("img_PNJCarrote", "src/assets/PNG/PNJCarrote.png");
+    this.load.image("img_PNJ2", "src/assets/PNG/PNJ2.png");
+    this.load.image("img_PNJ3", "src/assets/PNG/PNJ3.png");
+    this.load.image("img_PNJ_Requin", "src/assets/PNG/PNJ_Requin.png");
+    this.load.image("img_PNJ_Nageur", "src/assets/PNG/PNJ_Nageur.png");
+    this.load.image("img_PNJ_Miel", "src/assets/PNG/PNJ_Miel.png");
+    this.load.image("img_PNJ_Bucheron", "src/assets/PNG/PNJ_Bucheron.png");
+    this.load.image("img_PNJ_4", "src/assets/PNG/PNJ_4.png");
+    this.load.image("img_PNJ_5", "src/assets/PNG/PNJ_5.png");
+    this.load.image("img_PNJ_6", "src/assets/PNG/PNJ_6.png");
   }
 
   /***********************************************************************/
@@ -54,7 +79,7 @@ export default class General extends Phaser.Scene {
     // chargement du jeu de tuiles
     const tileset = CarteGeneralWord.addTilesetImage(
       "TileSet_VF",
-      "Phaser_TileSet",16,16,0,0
+      "Phaser_TileSet", 16, 16, 0, 0
     );
 
     this.textures.get('TileSet_VF').setFilter(Phaser.Textures.FilterMode.NEAREST);
@@ -192,6 +217,38 @@ export default class General extends Phaser.Scene {
       frameRate: 10
     });
 
+    /***********************
+     *  CREATION DES PNJ *
+    ************************/
+
+    //Création des PNJ
+    Pecheur = this.physics.add.sprite(2150, 1400, "img_Pecheur");
+    PNJ_Bucheron = this.physics.add.sprite(900, 1150, "img_PNJ_Bucheron");
+    PNJ_Miel = this.physics.add.sprite(1300, 2100, "img_PNJ_Miel");
+    PNJCarrote = this.physics.add.sprite(800, 1900, "img_PNJCarrote");
+    PNJCarrote = this.physics.add.sprite(2300, 1600, "img_PNJCarrote");
+    PNJ1 = this.physics.add.sprite(1480, 1600, "img_PNJ1");
+    PNJ1 = this.physics.add.sprite(1700, 2000, "img_PNJ1");
+    PNJ2 = this.physics.add.sprite(1640, 1450, "img_PNJ2");
+    PNJ2 = this.physics.add.sprite(1300, 1000, "img_PNJ2");
+    PNJ3 = this.physics.add.sprite(1600, 1550, "img_PNJ3");
+    PNJ_Requin = this.physics.add.sprite(1200, 700, "img_PNJ_Requin");
+    PNJ_Requin = this.physics.add.sprite(2000, 500, "img_PNJ_Requin");
+    PNJ_Requin = this.physics.add.sprite(1700, 800, "img_PNJ_Requin");
+    PNJ_Nageur = this.physics.add.sprite(1400, 1200, "img_PNJ_Nageur");
+    PNJ_Nageur = this.physics.add.sprite(950, 1900, "img_PNJ_Nageur");
+    PNJ_Nageur = this.physics.add.sprite(2150, 1650, "img_PNJ_Nageur");
+    PNJ_4 = this.physics.add.sprite(2000, 2400, "img_PNJ_4");
+    PNJ_4 = this.physics.add.sprite(950, 2300, "img_PNJ_4");
+    PNJ_5 = this.physics.add.sprite(1300, 1700, "img_PNJ_5");
+    PNJ_5 = this.physics.add.sprite(2500, 1300, "img_PNJ_5");
+    PNJ_6 = this.physics.add.sprite(1650, 1750, "img_PNJ_6");
+    PNJ_4 = this.physics.add.sprite(1750, 1150, "img_PNJ_4");
+    PNJ_6 = this.physics.add.sprite(2250, 2000, "img_PNJ_6");
+    PNJ_5 = this.physics.add.sprite(700, 1700, "img_PNJ_5");
+    PNJ_6 = this.physics.add.sprite(1320, 1400, "img_PNJ_6");
+
+    
     /***********************
      *  CREATION DU CLAVIER *
      ************************/
