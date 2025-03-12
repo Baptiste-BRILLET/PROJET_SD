@@ -6,8 +6,19 @@ export default class Mairie extends Phaser.Scene {
     });
   }
   preload() {
-    this.load.image("Phaser_TileSet", "src/assets/TileSet_VF.png");
+    this.load.image("Phaser_TileSetM", "src/assets/TileSet_VF.png");
     this.load.tilemapTiledJSON("carteMairie", "src/assets/mairie.json");
+
+    //Création PNJ
+    this.load.image("img_Maire", "src/assets/PNG/Maire.png");
+    this.load.image("PNJ1", "src/assets/PNG/PNJ1.png");
+    this.load.image("PNJ2", "src/assets/PNG/PNJ2.png");
+    this.load.image("PNJ3", "src/assets/PNG/PNJ3.png");
+
+    //Image Quetes
+    this.load.image("questImage5", "src/assets/Quete/Quete5.png"); // Image de la quête 5
+    this.load.image("contImage1", "src/assets/Quete/Continue1.png"); // Bouton Continue 1
+
   }
 
   /***********************************************************************/
@@ -21,8 +32,7 @@ export default class Mairie extends Phaser.Scene {
    * ainsi que toutes les instructions permettant de planifier des evenements
    */
   create() {
-    //this.game.config.type.width = 600;
-    //this.game.config.type.height = 600;
+
     /*************************************
      *  CREATION DU MONDE  *
      *************************************/
@@ -31,7 +41,7 @@ export default class Mairie extends Phaser.Scene {
     // chargement du jeu de tuiles
     const tileset = CarteMairie.addTilesetImage(
       "TileSet_VF",
-      "Phaser_TileSet"
+      "Phaser_TileSetM"
     );
     // chargement de chaque calque
     const plancher = CarteMairie.createLayer(
@@ -91,11 +101,32 @@ export default class Mairie extends Phaser.Scene {
      ****************************/
 
     // On créée un nouveeau personnage : player
-    this.player = this.physics.add.sprite(300, 400, "img_perso");
+    this.player = this.physics.add.sprite(320, 600, "img_perso");
     this.player.setBounce(0.2); // on donne un petit coefficient de rebond
     this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
 
-    
+    /***********************
+     *  CREATION DES PNJ *
+     ************************/
+
+    this.PNJ_Maire = this.physics.add.sprite(320, 360, "img_Maire");
+    this.PNJ1 = this.physics.add.sprite(320, 120, "PNJ1");
+    this.PNJ2 = this.physics.add.sprite(400, 500, "PNJ2");
+    this.PNJ3 = this.physics.add.sprite(200, 400, "PNJ3");
+
+    /*****************************************************
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ (Maire) *
+     ******************************************************/
+
+    // Création de l'image de quête, invisible par défaut
+    this.questImage5 = this.add.image(320, 320, "questImage5").setVisible(false);
+    this.contImage1 = this.add.image(320, 520, "contImage1").setVisible(false).setInteractive();
+
+
+    this.contImage1.on("pointerdown", () => {
+      this.hideQuestUI(this.questImage5, this.contImage1); // Cache l'interface
+    });
+
     /***********************
      *  CREATION DU CLAVIER *
      ************************/
@@ -106,13 +137,28 @@ export default class Mairie extends Phaser.Scene {
      *  GESTION DES INTERATIONS ENTRE  GROUPES ET ELEMENTS *
      ******************************************************/
 
-    //  Collide the player and the groupe_etoiles with the groupe_plateformes
+    //  Collide the player and objects
     this.physics.add.collider(this.player, objects);
   }
 
   /***********************************************************************/
+  /** FONCTION ShowQuestUI
+  /***********************************************************************/
+  showQuestUI(image, cont) {
+    image.setVisible(true);
+    cont.setVisible(true);
+  }
+  /***********************************************************************/
+  /** FONCTION HideQuestUI 
+  /***********************************************************************/
+  hideQuestUI(image, cont) {
+    image.setVisible(false);
+    cont.setVisible(false);
+  }
+
+  /***********************************************************************/
   /** FONCTION UPDATE
-/***********************************************************************/
+  /***********************************************************************/
 
   update() {
     // Gestion du clavier
@@ -150,6 +196,11 @@ export default class Mairie extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, 640, 640);
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
+
+    // Interaction avec le maire
+    if (this.physics.overlap(this.player, this.PNJ_Maire)) {
+      this.showQuestUI(this.questImage5, this.contImage1);
+    }
 
     // Si aucune touche n'est pressée, jouer l'animation de repos
     if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {

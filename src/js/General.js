@@ -20,6 +20,7 @@ var PNJ_4;
 var PNJ_5;
 var PNJ_6;
 var PNJMairie;
+var PNJ_Maire;
 // définition de la classe "selection"
 export default class General extends Phaser.Scene {
   constructor() {
@@ -275,7 +276,7 @@ export default class General extends Phaser.Scene {
      *  GESTION DES INTERATIONS ENTRE  GROUPES ET ELEMENTS *
      ******************************************************/
 
-    //  Collide the player and the groupe_etoiles with the groupe_plateformes
+    //  Collide the player objects
     this.physics.add.collider(player, objects);
     this.cameras.main.roundPixels = true;
 

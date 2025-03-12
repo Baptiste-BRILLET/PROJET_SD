@@ -15,42 +15,42 @@ export default class Abeille extends Phaser.Scene {
     //console.log(this.game.config.physics.arcade.gravity);
     const CarteAbeille = this.add.tilemap("carteAbeille");
     // chargement du jeu de tuiles
-    const tileset = CarteAbeille.addTilesetImage(
+    const tilesetV2 = CarteAbeille.addTilesetImage(
       "TileSet_VF2",
       "Phaser_TileSetV2"
     );
     // chargement de chaque calque
     const Fond = CarteAbeille.createLayer(
       "Fond",
-      tileset
+      tilesetV2
     );
-    const FondTerre = CarteAbeille.createLayer(
+    const FondTere = CarteAbeille.createLayer(
       "FondTerre",
-      tileset
+      tilesetV2
     );
     const FondArbre = CarteAbeille.createLayer(
       "FondArbre",
-      tileset
+      tilesetV2
     );
     const Foret = CarteAbeille.createLayer(
       "Foret",
-      tileset
+      tilesetV2
     );
     const Trou = CarteAbeille.createLayer(
       "Trou",
-      tileset
+      tilesetV2
     );
     const Plateforme = CarteAbeille.createLayer(
       "Plateforme",
-      tileset
+      tilesetV2
     );
     const Arbre = CarteAbeille.createLayer(
       "Arbre",
-      tileset
+      tilesetV2
     );
 
     // définition des tuiles de plateformes qui sont solides
-    const objects = [Fond, FondTerre, FondArbre, Foret, Trou, Plateforme, Arbre];
+    const objects = [Fond, FondTere, FondArbre, Foret, Trou, Plateforme, Arbre];
     objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
     /****************************
