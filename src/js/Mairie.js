@@ -88,52 +88,6 @@ export default class Mairie extends Phaser.Scene {
 
 
 
-    /****************************
-     *  CREATION DU PERSONNAGE  *
-     ****************************/
-
-    // On créée un nouveeau personnage : player
-    player = this.physics.add.sprite(300, 400, "img_perso");
-
-    //  propriétées physiqyes de l'objet player :
-    player.setBounce(0.2); // on donne un petit coefficient de rebond
-    player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
-
-    /***************************
-     *  CREATION DES ANIMATIONS *
-     ****************************/
-    // dans cette partie, on crée les animations, à partir des spritesheet
-    // chaque animation est une succession de frame à vitesse de défilement défini
-    // une animation doit avoir un nom. Quand on voudra la jouer sur un sprite, on utilisera la méthode play()
-    // creation de l'animation "anim_tourne_gauche" qui sera jouée sur le player lorsque ce dernier tourne à gauche
-    this.anims.create({
-      key: "anim_tourne_gauche", // key est le nom de l'animation : doit etre unique poru la scene.
-      frames: this.anims.generateFrameNumbers("img_perso", {
-        start: 0,
-        end: 3
-      }), // on prend toutes les frames de img perso numerotées de 0 à 3
-      frameRate: 10, // vitesse de défilement des frames
-      repeat: -1 // nombre de répétitions de l'animation. -1 = infini
-    });
-
-    // creation de l'animation "anim_tourne_face" qui sera jouée sur le player lorsque ce dernier n'avance pas.
-    this.anims.create({
-      key: "anim_face",
-      frames: [{ key: "img_perso", frame: 4 }],
-      frameRate: 20
-    });
-
-    // creation de l'animation "anim_tourne_droite" qui sera jouée sur le player lorsque ce dernier tourne à droite
-    this.anims.create({
-      key: "anim_tourne_droite",
-      frames: this.anims.generateFrameNumbers("img_perso", {
-        start: 5,
-        end: 8
-      }),
-      frameRate: 10,
-      repeat: -1
-    });
-
     /***********************
      *  CREATION DU CLAVIER *
      ************************/

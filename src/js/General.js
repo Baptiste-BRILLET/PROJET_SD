@@ -19,6 +19,7 @@ var PNJ_Bucheron;
 var PNJ_4;
 var PNJ_5;
 var PNJ_6;
+var PNJMairie;
 // définition de la classe "selection"
 export default class General extends Phaser.Scene {
   constructor() {
@@ -55,6 +56,13 @@ export default class General extends Phaser.Scene {
     this.load.image("img_PNJ_4", "src/assets/PNG/PNJ_4.png");
     this.load.image("img_PNJ_5", "src/assets/PNG/PNJ_5.png");
     this.load.image("img_PNJ_6", "src/assets/PNG/PNJ_6.png");
+
+
+    //Image Quetes
+    this.load.image("questImage", "src/assets/Quete/Quete.png"); // Image de la quête
+    this.load.image("playButton", "src/assets/Quete/Play.png"); // Bouton Play
+    this.load.image("quitButton", "src/assets/Quete/Exit.png"); // Bouton Quit
+  
   }
 
   /***********************************************************************/
@@ -90,20 +98,16 @@ export default class General extends Phaser.Scene {
       tileset
     );
 
-
-
     const Sable = CarteGeneralWord.createLayer(
       "Sable",
       tileset
     );
-    this.textures.get('Sable').setFilter(Phaser.Textures.FilterMode.NEAREST);
-
+    
     const BordSable = CarteGeneralWord.createLayer(
       "BordSable",
       tileset
     );
-    this.textures.get('BordSable').setFilter(Phaser.Textures.FilterMode.NEAREST);
-
+    
     const Terre = CarteGeneralWord.createLayer(
       "Terre",
       tileset
@@ -247,7 +251,10 @@ export default class General extends Phaser.Scene {
     PNJ_6 = this.physics.add.sprite(2250, 2000, "img_PNJ_6");
     PNJ_5 = this.physics.add.sprite(700, 1700, "img_PNJ_5");
     PNJ_6 = this.physics.add.sprite(1320, 1400, "img_PNJ_6");
-    PNJ3 = this.physics.add.sprite(1460, 1780, "img_PNJ3");
+    PNJMairie = this.physics.add.sprite(1460, 1780, "img_PNJ3");
+
+    // Ajout de la hitbox du PNJ
+    this.physics.add.overlap(player, PNJMairie, this.showQuestUI, null, this);
 
     
     /***********************
@@ -264,9 +271,39 @@ export default class General extends Phaser.Scene {
     this.physics.add.collider(player, objects);
     this.cameras.main.roundPixels = true;
 
+    /*****************************************************
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ *
+     ******************************************************/
+
+    // Création de l'image de quête, invisible par défaut
+    this.questImage = this.add.image(1460, 1780, "questImage").setVisible(false);
+    this.playButton = this.add.image(1420, 1780, "playButton").setVisible(false).setInteractive();
+    this.quitButton = this.add.image(1480, 1780, "quitButton").setVisible(false).setInteractive();
+
+    this.playButton.on("pointerdown", () => {
+      this.scene.start("mairie"); // Change de scène
+    });
+    this.quitButton.on("pointerdown", () => {
+      this.hideQuestUI(); // Cache l'interface
+    });
 
   }
-
+/***********************************************************************/
+  /** FONCTION ShowQuestUI
+/***********************************************************************/
+  showQuestUI() {
+    this.questImage.setVisible(true);
+    this.playButton.setVisible(true);
+    this.quitButton.setVisible(true);
+  }
+/***********************************************************************/
+  /** FONCTION HideQuestUI 
+/***********************************************************************/
+  hideQuestUI() {
+    this.questImage.setVisible(false);
+    this.playButton.setVisible(false);
+    this.quitButton.setVisible(false);
+  }
   /***********************************************************************/
   /** FONCTION UPDATE 
 /***********************************************************************/
@@ -315,6 +352,11 @@ export default class General extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, 3200, 3200);
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(player);
+
+    // Interaction pour la quetes
+    if (this.physics.overlap(player, PNJMairie)) {
+      this.showQuestUI();
+    }
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
       if (this.physics.overlap(player, this.porte1))
