@@ -155,7 +155,7 @@ export default class General extends Phaser.Scene {
      ****************************/
 
     // On créée un nouveeau personnage : player
-    player = this.physics.add.sprite(1500, 1500, "img_perso");
+    player = this.physics.add.sprite(1250, 800, "img_perso");
 
     //  propriétées physiqyes de l'objet player :
     player.setBounce(0.2); // on donne un petit coefficient de rebond
@@ -247,6 +247,7 @@ export default class General extends Phaser.Scene {
     PNJ_6 = this.physics.add.sprite(2250, 2000, "img_PNJ_6");
     PNJ_5 = this.physics.add.sprite(700, 1700, "img_PNJ_5");
     PNJ_6 = this.physics.add.sprite(1320, 1400, "img_PNJ_6");
+    PNJ3 = this.physics.add.sprite(1460, 1780, "img_PNJ3");
 
     
     /***********************
