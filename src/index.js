@@ -27,6 +27,8 @@ var config = {
       debug: false // permet de voir les hitbox et les vecteurs d'acceleration quand mis à true
     }
   },
+  pixelArt: true, // Important pour éviter l’antialiasing
+
   scene: [General, menu, Mairie, Peche, niveau2, niveau3]
 };
 

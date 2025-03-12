@@ -29,6 +29,7 @@ export default class General extends Phaser.Scene {
       frameWidth: 48,
       frameHeight: 48
     });
+
   }
 
   /***********************************************************************/
@@ -53,21 +54,31 @@ export default class General extends Phaser.Scene {
     // chargement du jeu de tuiles
     const tileset = CarteGeneralWord.addTilesetImage(
       "TileSet_VF",
-      "Phaser_TileSet"
+      "Phaser_TileSet",16,16,0,0
     );
+
+    this.textures.get('TileSet_VF').setFilter(Phaser.Textures.FilterMode.NEAREST);
+
     // chargement de chaque calque
     const Eau = CarteGeneralWord.createLayer(
       "Eau",
       tileset
     );
+
+
+
     const Sable = CarteGeneralWord.createLayer(
       "Sable",
       tileset
     );
+    this.textures.get('Sable').setFilter(Phaser.Textures.FilterMode.NEAREST);
+
     const BordSable = CarteGeneralWord.createLayer(
       "BordSable",
       tileset
     );
+    this.textures.get('BordSable').setFilter(Phaser.Textures.FilterMode.NEAREST);
+
     const Terre = CarteGeneralWord.createLayer(
       "Terre",
       tileset
@@ -110,10 +121,10 @@ export default class General extends Phaser.Scene {
     );
 
     // définition des tuiles de plateformes qui sont solides
-    const objects = [Eau, Sable, BordSable, Terre,Chemin, Arbres, Foret, Riviere, BordRiviere, Ponton, Batiment, Potager, Legume];
+    const objects = [Eau, Sable, BordSable, Terre, Chemin, Arbres, Foret, Riviere, BordRiviere, Ponton, Batiment, Potager, Legume];
     objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
-  
+
     /****************************
      *  CREATION DU PERSONNAGE  *
      ****************************/
@@ -124,10 +135,10 @@ export default class General extends Phaser.Scene {
     //  propriétées physiqyes de l'objet player :
     player.setBounce(0.2); // on donne un petit coefficient de rebond
     player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
-    player.setSize(16,16);
-    player.setOffset(16,16);
+    player.setSize(16, 16);
+    player.setOffset(16, 16);
     //player.setScale(1.5)
-    
+
     /***************************
      *  CREATION DES ANIMATIONS *
      ****************************/
@@ -136,31 +147,49 @@ export default class General extends Phaser.Scene {
     // une animation doit avoir un nom. Quand on voudra la jouer sur un sprite, on utilisera la méthode play()
     // creation de l'animation "anim_tourne_gauche" qui sera jouée sur le player lorsque ce dernier tourne à gauche
     this.anims.create({
-      key: "anim_tourne_gauche", // key est le nom de l'animation : doit etre unique poru la scene.
+      key: "anim_droite",
       frames: this.anims.generateFrameNumbers("img_perso", {
-        start: 0,
-        end: 3
-      }), // on prend toutes les frames de img perso numerotées de 0 à 3
-      frameRate: 10, // vitesse de défilement des frames
-      repeat: -1 // nombre de répétitions de l'animation. -1 = infini
+        start: 20, // Début de la ligne 6
+        end: 23   // Fin de la ligne 6
+      }),
+      frameRate: 10, //Affiche 10 images par seconde
+      repeat: -1 // Boucle infini
     });
 
-    // creation de l'animation "anim_tourne_face" qui sera jouée sur le player lorsque ce dernier n'avance pas.
     this.anims.create({
-      key: "anim_face",
-      frames: [{ key: "img_perso", frame: 4 }],
-      frameRate: 20
-    });
-
-    // creation de l'animation "anim_tourne_droite" qui sera jouée sur le player lorsque ce dernier tourne à droite
-    this.anims.create({
-      key: "anim_tourne_droite",
+      key: "anim_gauche",
       frames: this.anims.generateFrameNumbers("img_perso", {
-        start: 5,
-        end: 8
+        start: 24, // Début de la ligne 7
+        end: 27   // Fin de la ligne 7
       }),
       frameRate: 10,
       repeat: -1
+    });
+
+    this.anims.create({
+      key: "anim_face",
+      frames: this.anims.generateFrameNumbers("img_perso", {
+        start: 16, // Début de la ligne 5
+        end: 19   // Fin de la ligne 5
+      }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: "anim_dos",
+      frames: this.anims.generateFrameNumbers("img_perso", {
+        start: 28, // Début de la ligne 8
+        end: 31   // Fin de la ligne 8
+      }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: "anim_repos",
+      frames: [{ key: "img_perso", frame: 1 }],
+      frameRate: 10
     });
 
     /***********************
@@ -175,8 +204,9 @@ export default class General extends Phaser.Scene {
 
     //  Collide the player and the groupe_etoiles with the groupe_plateformes
     this.physics.add.collider(player, objects);
+    this.cameras.main.roundPixels = true;
 
-    
+
   }
 
   /***********************************************************************/
@@ -185,39 +215,48 @@ export default class General extends Phaser.Scene {
 
   update() {
 
-    if (clavier.left.isDown) {
-      player.setVelocityX(-160);
-      player.anims.play("anim_tourne_gauche", true);
+    // Gestion du clavier
+    let clavier = this.input.keyboard.createCursorKeys();
+    let keys = this.input.keyboard.addKeys({
+      up: Phaser.Input.Keyboard.KeyCodes.Z, //Touche Z pour avancer
+      down: Phaser.Input.Keyboard.KeyCodes.S, //Touche S pour reculer
+      left: Phaser.Input.Keyboard.KeyCodes.Q, //Touche Q pour aller à gauche
+      right: Phaser.Input.Keyboard.KeyCodes.D //Touche D pour aller à droite
+    });
 
-    } else if (clavier.right.isDown) {
+    // Déplacement horizontal
+    if (keys.left.isDown) {
+      player.setVelocityX(-160);
+      player.anims.play("anim_gauche", true);
+    } else if (keys.right.isDown) {
       player.setVelocityX(160);
-      player.anims.play("anim_tourne_droite", true);
+      player.anims.play("anim_droite", true);
     } else {
       player.setVelocityX(0);
-      if (player.body.velocity.y == 0)
-        player.anims.play("anim_face");
     }
 
-    if (clavier.up.isDown) {
+    // Déplacement vertical
+    if (keys.up.isDown) {
       player.setVelocityY(-160);
-      player.anims.play("anim_face", true);
-    }
-    else if (clavier.down.isDown) {
+      player.anims.play("anim_dos", true);
+    } else if (keys.down.isDown) {
       player.setVelocityY(160);
       player.anims.play("anim_face", true);
-    }
-    else {
+    } else {
       player.setVelocityY(0);
-      if (player.body.velocity.x == 0)
-        player.anims.play("anim_face");
+    }
+
+    // Si aucune touche n'est pressée, jouer l'animation de repos
+    if (player.body.velocity.x === 0 && player.body.velocity.y === 0) {
+      player.anims.play("anim_repos");
     }
 
     // redimentionnement du monde avec les dimensions calculées via tiled
- this.physics.world.setBounds(0, 0, 3200, 3200);
- //  ajout du champs de la caméra de taille identique à celle du monde
- this.cameras.main.setBounds(0, 0, 3200, 3200);
- // ancrage de la caméra sur le joueur
- this.cameras.main.startFollow(player);
+    this.physics.world.setBounds(0, 0, 3200, 3200);
+    //  ajout du champs de la caméra de taille identique à celle du monde
+    this.cameras.main.setBounds(0, 0, 3200, 3200);
+    // ancrage de la caméra sur le joueur
+    this.cameras.main.startFollow(player);
 
     if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
       if (this.physics.overlap(player, this.porte1))
