@@ -147,6 +147,7 @@ export default class Mairie extends Phaser.Scene {
   showQuestUI(image, cont) {
     image.setVisible(true);
     cont.setVisible(true);
+    cont.setInteractive(); // Active l'interactivité du bouton quand il apparaît
   }
   /***********************************************************************/
   /** FONCTION HideQuestUI 
@@ -154,6 +155,7 @@ export default class Mairie extends Phaser.Scene {
   hideQuestUI(image, cont) {
     image.setVisible(false);
     cont.setVisible(false);
+    cont.disableInteractive(); // Désactive l'interactivité pour éviter les clics fantômes
   }
 
   /***********************************************************************/
@@ -201,7 +203,16 @@ export default class Mairie extends Phaser.Scene {
     if (this.physics.overlap(this.player, this.PNJ_Maire)) {
       this.showQuestUI(this.questImage5, this.contImage1);
     }
+    // Vérifie la distance entre le joueur et le PNJ_Maire
+    const distanceMaire = Phaser.Math.Distance.Between(
+      this.player.x, this.player.y,
+      this.PNJ_Maire.x, this.PNJ_Maire.y
+    );
 
+    // Si le joueur est trop loin, on cache l'interface de quête
+    if (distanceMaire > 30) { // Ajuste la valeur 100 selon la taille de ton monde
+      this.hideQuestUI(this.questImage5, this.contImage1);
+    }
     // Si aucune touche n'est pressée, jouer l'animation de repos
     if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
       this.player.anims.play("anim_repos");
