@@ -184,9 +184,13 @@ export default class General extends Phaser.Scene {
 
     if (this.game.config.fromPeche != undefined && this.game.config.fromPeche == true) {
       player.x = this.game.config.x;
-      player.y = this.game.config.y = 600;
+      player.y = this.game.config.y;
     }
 
+    if (this.game.config.fromMairie != undefined && this.game.config.fromMairie == true) {
+      player.x = this.game.config.x;
+      player.y = this.game.config.y;
+    }
     /***************************
      *  CREATION DES ANIMATIONS *
      ****************************/
