@@ -34,4 +34,4 @@ var config = {
 
 // création et lancement du jeu
 var game = new Phaser.Game(config);
-game.scene.start("Abeille");
+game.scene.start("General");

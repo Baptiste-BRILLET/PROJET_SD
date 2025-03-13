@@ -25,6 +25,9 @@ var porte_retour;
 var plateforme_mobile;
 var levier;
 var tween_mouvement;
+var boutonFeu;
+var groupeBullets;
+var objetsFlottants;
 
 // définition de la classe "selection"
 export default class General extends Phaser.Scene {
@@ -318,8 +321,8 @@ export default class General extends Phaser.Scene {
 
     // Création de l'image de quête, invisible par défaut
     this.questImage1 = this.add.image(1460, 1780, "questImage1").setVisible(false);
-    this.playButton1 = this.add.image(1400, 1800, "playButton1").setVisible(false).setInteractive();
-    this.quitButton1 = this.add.image(1480, 1780, "quitButton1").setVisible(false).setInteractive();
+    this.playButton1 = this.add.image(1390, 1860, "playButton1").setVisible(false).setInteractive();
+    this.quitButton1 = this.add.image(1500, 1860, "quitButton1").setVisible(false).setInteractive();
 
     this.playButton1.on("pointerdown", () => {
       this.scene.start("Mairie"); // Change de scène
@@ -334,8 +337,8 @@ export default class General extends Phaser.Scene {
 
     // Création de l'image de quête, invisible par défaut
     this.questImage2 = this.add.image(2150, 1400, "questImage2").setVisible(false);
-    this.playButton2 = this.add.image(2100, 1500, "playButton2").setVisible(false).setInteractive();
-    this.quitButton2 = this.add.image(2200, 1500, "quitButton2").setVisible(false).setInteractive();
+    this.playButton2 = this.add.image(2080, 1480, "playButton2").setVisible(false).setInteractive();
+    this.quitButton2 = this.add.image(2190, 1480, "quitButton2").setVisible(false).setInteractive();
 
     this.playButton2.on("pointerdown", () => {
       this.scene.start("Peche"); // Change de scène
@@ -350,8 +353,8 @@ export default class General extends Phaser.Scene {
 
     // Création de l'image de quête, invisible par défaut
     this.questImage3 = this.add.image(900, 1500, "questImage3").setVisible(false);
-    this.playButton3 = this.add.image(850, 1400, "playButton3").setVisible(false).setInteractive();
-    this.quitButton3 = this.add.image(950, 1600, "quitButton3").setVisible(false).setInteractive();
+    this.playButton3 = this.add.image(830, 1230, "playButton3").setVisible(false).setInteractive();
+    this.quitButton3 = this.add.image(940, 1230, "quitButton3").setVisible(false).setInteractive();
 
     //On ne veux pas changer de scène mais juste afficher en plus un élément sur la map
     this.playButton3.on("pointerdown", () => {
@@ -368,8 +371,8 @@ export default class General extends Phaser.Scene {
 
     // Création de l'image de quête, invisible par défaut
     this.questImage4 = this.add.image(1300, 2100, "questImage4").setVisible(false);
-    this.playButton4 = this.add.image(1250, 2200, "playButton4").setVisible(false).setInteractive();
-    this.quitButton4 = this.add.image(1150, 2000, "quitButton4").setVisible(false).setInteractive();
+    this.playButton4 = this.add.image(1220, 2180, "playButton4").setVisible(false).setInteractive();
+    this.quitButton4 = this.add.image(1340, 2180, "quitButton4").setVisible(false).setInteractive();
 
     this.playButton4.on("pointerdown", () => {
       this.scene.start("Abeille"); // Change de scène
