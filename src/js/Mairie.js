@@ -158,6 +158,7 @@ export default class Mairie extends Phaser.Scene {
     cont.setVisible(true);
     cont.setInteractive(); // Active l'interactivité du bouton quand il apparaît
   }
+  
   /***********************************************************************/
   /** FONCTION HideQuestUI 
   /***********************************************************************/

@@ -92,11 +92,6 @@ export default class General extends Phaser.Scene {
     fct.doNothing();
     fct.doAlsoNothing();
 
-    if (this.game.config.fromPeche!= undefined && this.game.config.fromPeche==true) {
-      player.x = this.game.config.x;
-      player.y = this.game.config.Y = 600;
-      this.game.config.fromPeche=false;
-   }
     /*************************************
      *  CREATION DU MONDE  *
      *************************************/
@@ -186,6 +181,11 @@ export default class General extends Phaser.Scene {
     player.setSize(16, 16);
     player.setOffset(16, 16);
     //player.setScale(1.5)
+
+    if (this.game.config.fromPeche != undefined && this.game.config.fromPeche == true) {
+      player.x = this.game.config.x;
+      player.y = this.game.config.y = 600;
+    }
 
     /***************************
      *  CREATION DES ANIMATIONS *

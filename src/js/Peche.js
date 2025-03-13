@@ -179,10 +179,9 @@ export default class Peche extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
       if (this.physics.overlap(this.player, this.porte_retour)) {
         this.game.config.fromPeche=true;
-        this.game.config.x = 2000;
-        this.game.config.Y = 600;
+        this.game.config.x = 1600;
+        this.game.config.y = 1600;
         this.scene.start("General");
-        this.game.config.fromPeche=false;
       }
     }
   }
