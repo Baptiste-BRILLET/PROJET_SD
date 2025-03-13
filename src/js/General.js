@@ -351,7 +351,8 @@ export default class General extends Phaser.Scene {
 
     //On ne veux pas changer de scène mais juste afficher en plus un élément sur la map
     this.playButton3.on("pointerdown", () => {
-      this.physics.add.sprite(1250, 800, "img_crabe");
+      this.physics.add.sprite(1600, 1600, "img_crabe");
+      this.hideQuestUI(this.questImage3, this.playButton3, this.quitButton3); // Cache l'interface
     });
     this.quitButton3.on("pointerdown", () => {
       this.hideQuestUI(this.questImage3, this.playButton3, this.quitButton3); // Cache l'interface

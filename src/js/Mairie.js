@@ -202,6 +202,12 @@ export default class Mairie extends Phaser.Scene {
     } else {
       this.player.setVelocityY(0);
     }
+
+    // Si aucune touche n'est pressée, jouer l'animation de repos
+    if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
+      this.player.anims.play("anim_repos");
+    }
+
     // redimentionnement du monde avec les dimensions calculées via tiled
     this.physics.world.setBounds(0, 0, 640, 640);
     //  ajout du champs de la caméra de taille identique à celle du monde
@@ -219,20 +225,15 @@ export default class Mairie extends Phaser.Scene {
       this.PNJ_Maire.x, this.PNJ_Maire.y
     );
 
-    // Si aucune touche n'est pressée, jouer l'animation de repos
-    if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
-      this.player.anims.play("anim_repos");
-    }
-    
     // Si le joueur est trop loin, on cache l'interface de quête
     if (distanceMaire > 30) { // Ajuste la valeur 100 selon la taille de ton monde
       this.hideQuestUI(this.questImage5, this.contImage1);
     }
-    
+
 
     if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
       if (this.physics.overlap(this.player, this.porte_retour)) {
-        this.game.config.fromMairie=true;
+        this.game.config.fromMairie = true;
         this.game.config.x = 1600;
         this.game.config.y = 1600;
         this.scene.start("General");

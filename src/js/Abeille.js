@@ -83,7 +83,7 @@ export default class Abeille extends Phaser.Scene {
     this.keys = this.input.keyboard.addKeys({
       left: Phaser.Input.Keyboard.KeyCodes.Q, //Touche Q pour aller à gauche
       right: Phaser.Input.Keyboard.KeyCodes.D, //Touche D pour aller à droite
-      space: Phaser.Input.Keyboard.KeyCodes.Space
+      space: Phaser.Input.Keyboard.KeyCodes.A,
     });
 
     if (this.keys.left.isDown) {

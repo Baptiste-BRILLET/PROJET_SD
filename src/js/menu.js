@@ -6,8 +6,8 @@ export default class menu extends Phaser.Scene {
   }
   //on charge les images
   preload() {
-    this.load.image("menu_fond", "src/assets/sky.png");
-    this.load.image("imageBoutonPlay", "src/assets/door1.png");
+    this.load.image("menu_fond", "src/assets/Fond.png");
+    this.load.image("imageBoutonPlay", "src/assets/Quete/PlayStart.png");
   }
 
   create() {
@@ -18,7 +18,7 @@ export default class menu extends Phaser.Scene {
       .setDepth(0);
 
     //on ajoute un bouton de clic, nommé bouton_play
-    var bouton_play = this.add.image(300, 450, "imageBoutonPlay").setDepth(1);
+    var bouton_play = this.add.image(150, 450, "imageBoutonPlay").setDepth(1);
    
     //=========================================================
     //on rend le bouton interratif
@@ -33,7 +33,7 @@ export default class menu extends Phaser.Scene {
     //Cas ou la sourris clique sur le bouton play :
     // on lance le niveau 1
     bouton_play.on("pointerup", () => {
-      this.scene.start("Abeille");
+      this.scene.start("General");
     });
   }
 } 
