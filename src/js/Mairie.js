@@ -15,6 +15,9 @@ export default class Mairie extends Phaser.Scene {
     this.load.image("PNJ2", "src/assets/PNG/PNJ2.png");
     this.load.image("PNJ3", "src/assets/PNG/PNJ3.png");
 
+    //Création porte Exit
+    this.load.image("PorteExit", "src/assets/PorteExit3.png");
+
     //Image Quetes
     this.load.image("questImage5", "src/assets/Quete/Quete5.png"); // Image de la quête 5
     this.load.image("contImage1", "src/assets/Quete/Continue1.png"); // Bouton Continue 1
@@ -127,6 +130,12 @@ export default class Mairie extends Phaser.Scene {
       this.hideQuestUI(this.questImage5, this.contImage1); // Cache l'interface
     });
 
+    /*****************************************************
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PORTE *
+     ******************************************************/
+
+    this.porte_retour = this.physics.add.staticSprite(260, 622, "PorteExit");
+
     /***********************
      *  CREATION DU CLAVIER *
      ************************/
@@ -216,6 +225,12 @@ export default class Mairie extends Phaser.Scene {
     // Si aucune touche n'est pressée, jouer l'animation de repos
     if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
       this.player.anims.play("anim_repos");
+    }
+
+    if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
+      if (this.physics.overlap(this.player, this.porte_retour)) {
+        this.scene.start("General");
+      }
     }
   }
 }

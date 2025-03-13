@@ -8,6 +8,15 @@ export default class Peche extends Phaser.Scene {
   preload() {
     this.load.image("Phaser_TileSet_Peche", "src/assets/TileSet_VF.png");
     this.load.tilemapTiledJSON("cartePeche", "src/assets/peche.json");
+
+    //Création PNJ
+    this.load.image("Pecheur", "src/assets/PNG/Pecheur.png");
+    this.load.image("PNJ1", "src/assets/PNG/PNJ1.png");
+    this.load.image("PNJ_5", "src/assets/PNG/PNJ_5.png");
+    this.load.image("PNJ_6", "src/assets/PNG/PNJ_6.png");
+
+    //Création porte Exit
+    this.load.image("PorteExit2", "src/assets/PorteExit2.png");
   }
 
 
@@ -42,11 +51,30 @@ export default class Peche extends Phaser.Scene {
     const objects = [Fond, Herbe, Accesoire, Legume,];
     objects.forEach(obj => obj.setCollisionByProperty({ estSolide: true }));
 
-    this.player = this.physics.add.sprite(320, 620, "img_perso");
+    /****************************
+     *  RECUPERATION DU PERSONNAGE  *
+     ****************************/
+    this.player = this.physics.add.sprite(320, 570, "img_perso");
     this.player.setBounce(0.2); // on donne un petit coefficient de rebond
     this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
     this.player.setSize(16, 16);
     this.player.setOffset(16, 16);
+
+    /***********************
+     *  CREATION DES PNJ *
+     ************************/
+
+    this.Pecheur = this.physics.add.sprite(320, 240, "Pecheur");
+    this.PNJ1 = this.physics.add.sprite(320, 120, "PNJ1");
+    this.PNJ_5 = this.physics.add.sprite(140, 200, "PNJ_5");
+    this.PNJ_6 = this.physics.add.sprite(100, 500, "PNJ_6");
+
+    /*****************************************************
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PORTE *
+     ******************************************************/
+
+    this.porte_retour = this.physics.add.staticSprite(320, 622, "PorteExit2");
+
 
     /***********************
      *  CREATION DU CLAVIER *
@@ -102,6 +130,12 @@ export default class Peche extends Phaser.Scene {
     // Si aucune touche n'est pressée, jouer l'animation de repos
     if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
       this.player.anims.play("anim_repos");
+    }
+
+    if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
+      if (this.physics.overlap(this.player, this.porte_retour)) {
+        this.scene.start("General");
+      }
     }
   }
 }
