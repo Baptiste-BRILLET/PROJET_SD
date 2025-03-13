@@ -82,7 +82,8 @@ export default class Abeille extends Phaser.Scene {
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys({
       left: Phaser.Input.Keyboard.KeyCodes.Q, //Touche Q pour aller à gauche
-      right: Phaser.Input.Keyboard.KeyCodes.D //Touche D pour aller à droite
+      right: Phaser.Input.Keyboard.KeyCodes.D, //Touche D pour aller à droite
+      space: Phaser.Input.Keyboard.KeyCodes.Space
     });
 
     if (this.keys.left.isDown) {
@@ -100,9 +101,8 @@ export default class Abeille extends Phaser.Scene {
       this.player.anims.play("anim_repos");
     }
 
-    if (Phaser.Input.Keyboard.JustDown(this.clavier) && this.player.body.onFloor()) {
+    if (this.keys.space.isDown && this.player.body.blocked.down) {
       this.player.setVelocityY(-330);
-      console.log("Saut déclenché !");
     }
 
     // redimentionnement du monde avec les dimensions calculées via tiled
