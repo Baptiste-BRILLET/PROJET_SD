@@ -8,6 +8,9 @@ export default class Abeille extends Phaser.Scene {
   preload() {
     this.load.image("Phaser_TileSetV2", "src/assets/TileSet_VF2.png");
     this.load.tilemapTiledJSON("carteAbeille", "src/assets/Abeille.json");
+    this.load.image("img_cage", "src/assets/Cage.png");
+    this.load.image("img_levier", "src/assets/levier.png");
+    this.load.image("img_TestBees", "src/assets/TestBees.png");
   }
 
   create() {
@@ -61,7 +64,15 @@ export default class Abeille extends Phaser.Scene {
     this.player.refreshBody();
     this.player.setBounce(0.2); // on donne un petit coefficient de rebond
     this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
-    
+
+    /****************************
+    *  CREATION DU PNJ EN PRISON *
+    ****************************/
+    this.pnj = this.physics.add.sprite(340, 270, "img_TestBees");
+    this.pnj.setImmovable(true);
+    this.pnj.body.allowGravity = false;
+    this.pnj.setCollideWorldBounds(true);
+
     /***********************
      *  CREATION DU CLAVIER *
      ************************/
@@ -75,6 +86,49 @@ export default class Abeille extends Phaser.Scene {
     //  Collide the player and the groupe_etoiles with the groupe_plateformes
     this.physics.add.collider(this.player, objects);
 
+    /****************************
+    *  CREATION DE LA CAGE MOBILE *
+    ****************************/
+    this.plateforme_mobile = this.physics.add.sprite(340, 270, "img_cage");
+    this.plateforme_mobile.body.allowGravity = false;
+    this.plateforme_mobile.body.immovable = true;
+
+    this.tween_mouvement = this.tweens.add({
+      targets: [this.plateforme_mobile],
+      paused: true,
+      ease: "Linear",
+      duration: 2000,
+      yoyo: true,
+      y: "-=300",
+      hold: 1000,
+      repeatDelay: 1000,
+      repeat: -1
+    });
+
+     /****************************
+    *  LEVIER POUR CONTROLER LA CAGE *
+    ****************************/
+     this.levier = this.physics.add.staticSprite(200, 270, "img_levier");
+     this.levier.active = false;
+ 
+     /****************************
+     *  COLLISIONS *
+     ****************************/
+     this.physics.add.collider(this.player, objects);
+     this.physics.add.collider(this.pnj, objects);
+     this.physics.add.collider(this.plateforme_mobile, objects);
+     this.physics.add.collider(this.pnj, this.plateforme_mobile);
+ 
+     /****************************
+     *  EVENEMENT DE LIBERATION  *
+     ****************************/
+     this.physics.add.overlap(this.pnj, this.plateforme_mobile, () => {
+       if (!this.plateforme_mobile.body.touching.down) {
+         this.pnj.setImmovable(false);
+         this.pnj.body.allowGravity = true;
+       }
+     });
+   
   }
 
   update() {
@@ -83,7 +137,8 @@ export default class Abeille extends Phaser.Scene {
     this.keys = this.input.keyboard.addKeys({
       left: Phaser.Input.Keyboard.KeyCodes.Q, //Touche Q pour aller à gauche
       right: Phaser.Input.Keyboard.KeyCodes.D, //Touche D pour aller à droite
-      space: Phaser.Input.Keyboard.KeyCodes.A,
+      space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+      act: Phaser.Input.Keyboard.KeyCodes.A,
     });
 
     if (this.keys.left.isDown) {
@@ -112,6 +167,20 @@ export default class Abeille extends Phaser.Scene {
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
 
-
+    if (this.keys.act.isDown) {
+      if (this.physics.overlap(this.player, this.levier)) {
+        if (this.levier.active == true) {
+          this.levier.active = false; // on désactive le levier
+          this.levier.flipX = false; // permet d'inverser l'image
+          this.tween_mouvement.pause();  // on stoppe le tween
+        }
+        // sinon :  on l'active et stoppe la plateforme
+        else {
+          this.levier.active = true; // on active le levier 
+          this.levier.flipX = true; // on tourne l'image du levier
+          this.tween_mouvement.resume();  // on relance le tween
+        }
+      }
+    }
   }
 }

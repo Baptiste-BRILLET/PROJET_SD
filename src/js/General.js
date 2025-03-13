@@ -22,6 +22,10 @@ var PNJ_6;
 var PNJMairie;
 var PNJ_Maire;
 var porte_retour;
+var plateforme_mobile;
+var levier;
+var tween_mouvement;
+
 // définition de la classe "selection"
 export default class General extends Phaser.Scene {
   constructor() {
