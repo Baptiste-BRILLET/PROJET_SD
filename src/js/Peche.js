@@ -154,6 +154,12 @@ export default class Peche extends Phaser.Scene {
     } else {
       this.player.setVelocityY(0);
     }
+
+    // Si aucune touche n'est pressée, jouer l'animation de repos
+    if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
+      this.player.anims.play("anim_repos");
+    }
+    
     // redimentionnement du monde avec les dimensions calculées via tiled
     this.physics.world.setBounds(0, 0, 640, 640);
     //  ajout du champs de la caméra de taille identique à celle du monde
@@ -161,10 +167,7 @@ export default class Peche extends Phaser.Scene {
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
 
-    // Si aucune touche n'est pressée, jouer l'animation de repos
-    if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
-      this.player.anims.play("anim_repos");
-    }
+    
 
     // Supprime les objets qui dépassent X = 500
     this.objetsFlottants.getChildren().forEach((objet) => {

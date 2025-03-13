@@ -11,8 +11,7 @@ export default class Abeille extends Phaser.Scene {
   }
 
   create() {
-    //this.game.config.physics.arcade.gravity.y = 300;
-    //console.log(this.game.config.physics.arcade.gravity);
+    this.game.config.physics.arcade.gravity.y = 300;
     const CarteAbeille = this.add.tilemap("carteAbeille");
     // chargement du jeu de tuiles
     const tilesetV2 = CarteAbeille.addTilesetImage(
@@ -25,7 +24,7 @@ export default class Abeille extends Phaser.Scene {
       tilesetV2
     );
     const FondTere = CarteAbeille.createLayer(
-      "FondTerre",
+      "FondTere",
       tilesetV2
     );
     const FondArbre = CarteAbeille.createLayer(
@@ -57,7 +56,7 @@ export default class Abeille extends Phaser.Scene {
     *  RECUPERATION DU PERSONNAGE  *
     ****************************/
 
-    // On créée un nouveeau personnage : player
+    // On récupère le personnage
     this.player = this.physics.add.sprite(300, 400, "img_perso");
     this.player.setBounce(0.2); // on donne un petit coefficient de rebond
     this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
@@ -108,6 +107,12 @@ export default class Abeille extends Phaser.Scene {
     } else {
       this.player.setVelocityY(0);
     }
+
+    // Si aucune touche n'est pressée, jouer l'animation de repos
+    if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
+      this.player.anims.play("anim_repos");
+    }
+
     // redimentionnement du monde avec les dimensions calculées via tiled
     this.physics.world.setBounds(0, 0, 640, 3200);
     //  ajout du champs de la caméra de taille identique à celle du monde
@@ -115,9 +120,6 @@ export default class Abeille extends Phaser.Scene {
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
 
-    // Si aucune touche n'est pressée, jouer l'animation de repos
-    if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
-      this.player.anims.play("anim_repos");
-    }
+
   }
 }

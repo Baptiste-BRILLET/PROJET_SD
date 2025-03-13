@@ -182,6 +182,17 @@ export default class General extends Phaser.Scene {
     player.setOffset(16, 16);
     //player.setScale(1.5)
 
+    /****************************
+    *  CREATION DU PERSONNAGE  *
+    ****************************/
+    /**
+    * Met à jour la position du joueur si celui-ci provient de la scène "Pêche" ou "Mairie" ou "Abeille".
+    * 
+    * Vérifie si `fromPeche` ou `fromMairie` ou `fromAbeille` est défini et vrai dans `this.game.config`.
+    * Si c'est le cas, la position du joueur (`player.x` et `player.y`) est mise à jour 
+    * avec les coordonnées stockées dans `this.game.config.x` et `this.game.config.y`.
+    */
+
     if (this.game.config.fromPeche != undefined && this.game.config.fromPeche == true) {
       player.x = this.game.config.x;
       player.y = this.game.config.y;
@@ -191,6 +202,12 @@ export default class General extends Phaser.Scene {
       player.x = this.game.config.x;
       player.y = this.game.config.y;
     }
+
+    if (this.game.config.fromAbeille != undefined && this.game.config.fromAbeille == true) {
+      player.x = this.game.config.x;
+      player.y = this.game.config.y;
+    }
+
     /***************************
      *  CREATION DES ANIMATIONS *
      ****************************/
