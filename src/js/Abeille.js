@@ -86,7 +86,7 @@ export default class Abeille extends Phaser.Scene {
       repeat: -1 // Animation infinie
     });
 
-    this.pnj = this.physics.add.sprite(2780, 155, "img_bees");
+    this.pnj = this.physics.add.sprite(2780, 165, "img_bees");
     this.pnj.anims.play("fly", true);
 
     // Par défaut, elle ne bouge pas (bloquée dans la cage)

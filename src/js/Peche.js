@@ -19,12 +19,12 @@ export default class Peche extends Phaser.Scene {
     this.load.image("SacP", "src/assets/Riviere/SacP.png");
     this.load.image("Crabe", "src/assets/Riviere/Crabe.png");
     this.load.image("EtoileJ", "src/assets/Riviere/EtoileJ.png");
-    this.load.image("EtoileR", "src/assets/Riviere/EtoileR.png");
+    this.load.image("Poubelle", "src/assets/Riviere/Poubelle.png");
 
-    
+
     this.load.image("PorteExit2", "src/assets/PorteExit2.png");
 
-   
+
     this.load.image("bullet", "src/assets/balle.png");
   }
 
@@ -114,7 +114,7 @@ export default class Peche extends Phaser.Scene {
   }
 
   spawnFloatingObject() {
-    const objets = ["Poisson", "Encre", "SacP", "Crabe", "EtoileJ", "EtoileR"];
+    const objets = ["Poisson", "Encre", "SacP", "Crabe", "EtoileJ", "Poubelle"];
     const typeObjet = Phaser.Utils.Array.GetRandom(objets);
 
     const yPosition = Phaser.Math.Between(245, 380);
@@ -151,7 +151,9 @@ export default class Peche extends Phaser.Scene {
     bullet.destroy();
     objet.destroy();
 
-    if (objet.texture.key === "Encre") {
+    const objetsNegatifs = ["Encre", "Poubelle"];
+
+    if (objetsNegatifs.includes(objet.texture.key)) {
       this.score -= 3;
     } else {
       this.score += 1;
@@ -190,6 +192,13 @@ export default class Peche extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.keys.fire)) {
       this.tirer();
     }
+
+    // Supprime les objets qui dépassent X = 500
+    this.objetsFlottants.getChildren().forEach((objet) => {
+      if (objet.x > 550) {
+        objet.destroy();
+      }
+    });
 
     if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
       if (this.physics.overlap(this.player, this.porte_retour)) {

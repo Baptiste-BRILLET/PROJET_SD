@@ -123,7 +123,7 @@ export default class Mairie extends Phaser.Scene {
 
     // Création de l'image de quête, invisible par défaut
     this.questImage5 = this.add.image(320, 320, "questImage5").setVisible(false);
-    this.contImage1 = this.add.image(300, 400, "contImage1").setVisible(false).setInteractive();
+    this.contImage1 = this.add.image(320, 500, "contImage1").setVisible(false).setInteractive();
 
 
     this.contImage1.on("pointerdown", () => {

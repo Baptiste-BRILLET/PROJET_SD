@@ -2,7 +2,6 @@
 import Mairie from "/src/js/Mairie.js";
 import Peche from "/src/js/Peche.js";
 import Abeille from "/src/js/Abeille.js";
-import niveau3 from "/src/js/niveau3.js";
 import menu from "/src/js/menu.js";
 import General from "/src/js/General.js";
 
@@ -29,7 +28,7 @@ var config = {
   },
   pixelArt: true, // Important pour éviter l’antialiasing
 
-  scene: [General, menu, Mairie, Peche, Abeille, niveau3]
+  scene: [General, menu, Mairie, Peche, Abeille]
 };
 
 // création et lancement du jeu
