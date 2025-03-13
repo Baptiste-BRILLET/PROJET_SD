@@ -91,6 +91,12 @@ export default class General extends Phaser.Scene {
   create() {
     fct.doNothing();
     fct.doAlsoNothing();
+
+    if (this.game.config.fromPeche!= undefined && this.game.config.fromPeche==true) {
+      player.x = this.game.config.x;
+      player.y = this.game.config.Y = 600;
+      this.game.config.fromPeche=false;
+   }
     /*************************************
      *  CREATION DU MONDE  *
      *************************************/
