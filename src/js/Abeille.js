@@ -11,7 +11,7 @@ export default class Abeille extends Phaser.Scene {
   }
 
   create() {
-    this.game.config.physics.arcade.gravity.y = 300;
+    this.physics.world.gravity.y = 300;
     const CarteAbeille = this.add.tilemap("carteAbeille");
     // chargement du jeu de tuiles
     const tilesetV2 = CarteAbeille.addTilesetImage(
@@ -57,11 +57,11 @@ export default class Abeille extends Phaser.Scene {
     ****************************/
 
     // On récupère le personnage
-    this.player = this.physics.add.sprite(300, 400, "img_perso");
+    this.player = this.physics.add.sprite(100, 100, "img_perso");
+    this.player.refreshBody();
     this.player.setBounce(0.2); // on donne un petit coefficient de rebond
     this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
-
-
+    
     /***********************
      *  CREATION DU CLAVIER *
      ************************/
@@ -81,8 +81,6 @@ export default class Abeille extends Phaser.Scene {
     // Gestion du clavier
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.Z, //Touche Z pour avancer
-      down: Phaser.Input.Keyboard.KeyCodes.S, //Touche S pour reculer
       left: Phaser.Input.Keyboard.KeyCodes.Q, //Touche Q pour aller à gauche
       right: Phaser.Input.Keyboard.KeyCodes.D //Touche D pour aller à droite
     });
@@ -97,26 +95,20 @@ export default class Abeille extends Phaser.Scene {
       this.player.setVelocityX(0);
     }
 
-    // Déplacement vertical
-    if (this.keys.up.isDown) {
-      this.player.setVelocityY(-160);
-      this.player.anims.play("anim_dos", true);
-    } else if (this.keys.down.isDown) {
-      this.player.setVelocityY(160);
-      this.player.anims.play("anim_face", true);
-    } else {
-      this.player.setVelocityY(0);
-    }
-
     // Si aucune touche n'est pressée, jouer l'animation de repos
-    if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
+    if (this.player.body.velocity.x === 0) {
       this.player.anims.play("anim_repos");
     }
 
+    if (Phaser.Input.Keyboard.JustDown(this.clavier) && this.player.body.onFloor()) {
+      this.player.setVelocityY(-330);
+      console.log("Saut déclenché !");
+    }
+
     // redimentionnement du monde avec les dimensions calculées via tiled
-    this.physics.world.setBounds(0, 0, 640, 3200);
+    this.physics.world.setBounds(0, 0, 3200, 640);
     //  ajout du champs de la caméra de taille identique à celle du monde
-    this.cameras.main.setBounds(0, 0, 640, 3200);
+    this.cameras.main.setBounds(0, 0, 3200, 640);
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
 
