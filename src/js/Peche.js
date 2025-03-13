@@ -15,6 +15,15 @@ export default class Peche extends Phaser.Scene {
     this.load.image("PNJ_5", "src/assets/PNG/PNJ_5.png");
     this.load.image("PNJ_6", "src/assets/PNG/PNJ_6.png");
 
+    //Création img Rivière
+    this.load.image("Poisson", "src/assets/Riviere/Poisson.png");
+    this.load.image("Encre", "src/assets/Riviere/Encre.png");
+    this.load.image("SacP", "src/assets/Riviere/SacP.png");
+    this.load.image("Crabe", "src/assets/Riviere/Crabe.png");
+    this.load.image("EtoileJ", "src/assets/Riviere/EtoileJ.png");
+    this.load.image("EtoileR", "src/assets/Riviere/EtoileR.png");
+
+
     //Création porte Exit
     this.load.image("PorteExit2", "src/assets/PorteExit2.png");
   }
@@ -88,6 +97,31 @@ export default class Peche extends Phaser.Scene {
 
     //  Collide the player and the groupe_etoiles with the groupe_plateformes
     this.physics.add.collider(this.player, objects);
+
+    /***********************
+     *  CREATION DE LA RIVIERE *
+     ************************/
+
+    this.objetsFlottants = this.physics.add.group();
+    this.timer = this.time.addEvent({
+      delay: 2000, // Crée un objet toutes les 2 secondes
+      loop: true,
+      callback: this.spawnFloatingObject,
+      callbackScope: this
+    });
+
+  }
+
+  spawnFloatingObject() {
+    const objets = ["Poisson", "Encre","SacP","Crabe","EtoileJ","EtoileR"];
+    const typeObjet = Phaser.Utils.Array.GetRandom(objets);
+
+    // Position de départ à gauche de la rivière
+    const yPosition = Phaser.Math.Between(245, 380); // Ajuste selon ta rivière
+    const objet = this.objetsFlottants.create(-50, yPosition, typeObjet);
+
+    objet.setVelocityX(50); // Déplacement vers la droite
+    objet.setScale(0.5); // Ajuste la taille si nécessaire
   }
 
   update() {
@@ -131,6 +165,16 @@ export default class Peche extends Phaser.Scene {
     if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
       this.player.anims.play("anim_repos");
     }
+
+    // Supprime les objets qui dépassent X = 500
+    this.objetsFlottants.getChildren().forEach((objet) => {
+      if (objet.x > 550) {
+        objet.destroy();
+      }
+    });
+
+    // Ton code existant (déplacement du joueur, etc.)
+
 
     if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
       if (this.physics.overlap(this.player, this.porte_retour)) {
