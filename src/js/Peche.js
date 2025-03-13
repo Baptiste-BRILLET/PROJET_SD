@@ -159,7 +159,7 @@ export default class Peche extends Phaser.Scene {
     if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
       this.player.anims.play("anim_repos");
     }
-    
+
     // redimentionnement du monde avec les dimensions calculées via tiled
     this.physics.world.setBounds(0, 0, 640, 640);
     //  ajout du champs de la caméra de taille identique à celle du monde
@@ -169,7 +169,7 @@ export default class Peche extends Phaser.Scene {
 
     
 
-    // Supprime les objets qui dépassent X = 500
+    // Supprime les objets qui dépassent X = 550
     this.objetsFlottants.getChildren().forEach((objet) => {
       if (objet.x > 550) {
         objet.destroy();

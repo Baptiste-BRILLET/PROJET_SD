@@ -9,8 +9,15 @@ export default class Abeille extends Phaser.Scene {
     this.load.image("Phaser_TileSetV2", "src/assets/TileSet_VF2.png");
     this.load.tilemapTiledJSON("carteAbeille", "src/assets/Abeille.json");
     this.load.image("img_cage", "src/assets/Cage.png");
-    this.load.image("img_levier", "src/assets/levier.png");
+    this.load.image("img_cle", "src/assets/img_cle.png");
     this.load.image("img_TestBees", "src/assets/TestBees.png");
+    this.load.image("img_PorteSortie", "src/assets/PorteExit4.png");
+
+
+    this.load.spritesheet("img_bees", "src/assets/bees.png", {
+      frameWidth: 16,  // Largeur d'un sprite
+      frameHeight: 16 // Hauteur d'un sprite
+    });
   }
 
   create() {
@@ -60,15 +67,32 @@ export default class Abeille extends Phaser.Scene {
     ****************************/
 
     // On récupère le personnage
-    this.player = this.physics.add.sprite(100, 100, "img_perso");
+    this.player = this.physics.add.sprite(100, 235, "img_perso");
+    this.player.setSize(16, 16); // Réduit la hitbox à 16x16
+    this.player.setOffset(16, 16); // Ajuste si besoin pour centrer
     this.player.refreshBody();
     this.player.setBounce(0.2); // on donne un petit coefficient de rebond
     this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
 
+
     /****************************
-    *  CREATION DU PNJ EN PRISON *
+    *  CREATION DE L'ABEILLE EN PRISON *
     ****************************/
-    this.pnj = this.physics.add.sprite(340, 270, "img_TestBees");
+
+    this.anims.create({
+      key: "fly",
+      frames: this.anims.generateFrameNumbers("img_bees", { frames: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10] }),
+      frameRate: 10, // Ajuste si besoin
+      repeat: -1 // Animation infinie
+    });
+
+    this.pnj = this.physics.add.sprite(2780, 155, "img_bees");
+    this.pnj.anims.play("fly", true);
+
+    // Par défaut, elle ne bouge pas (bloquée dans la cage)
+    this.pnj.setVelocity(0, 0);
+    this.pnj.body.allowGravity = false; // Elle flotte
+    this.pnj_active = false; // Indique si elle est libérée
     this.pnj.setImmovable(true);
     this.pnj.body.allowGravity = false;
     this.pnj.setCollideWorldBounds(true);
@@ -89,7 +113,7 @@ export default class Abeille extends Phaser.Scene {
     /****************************
     *  CREATION DE LA CAGE MOBILE *
     ****************************/
-    this.plateforme_mobile = this.physics.add.sprite(340, 270, "img_cage");
+    this.plateforme_mobile = this.physics.add.sprite(2780, 170, "img_cage");
     this.plateforme_mobile.body.allowGravity = false;
     this.plateforme_mobile.body.immovable = true;
 
@@ -98,37 +122,52 @@ export default class Abeille extends Phaser.Scene {
       paused: true,
       ease: "Linear",
       duration: 2000,
-      yoyo: true,
-      y: "-=300",
+      yoyo: false,
+      y: "-=160",
       hold: 1000,
       repeatDelay: 1000,
-      repeat: -1
+      repeat: 0
     });
 
-     /****************************
-    *  LEVIER POUR CONTROLER LA CAGE *
+    /****************************
+   *  CLE POUR LEVER LA CAGE *
+   ****************************/
+    this.cle = this.physics.add.sprite(3055, 280, "img_cle");
+    this.cle.body.allowGravity = false;
+    this.physics.add.overlap(this.player, this.cle, this.collectCle, null, this);
+
+    /****************************
+    *  COLLISIONS *
     ****************************/
-     this.levier = this.physics.add.staticSprite(200, 270, "img_levier");
-     this.levier.active = false;
- 
-     /****************************
-     *  COLLISIONS *
-     ****************************/
-     this.physics.add.collider(this.player, objects);
-     this.physics.add.collider(this.pnj, objects);
-     this.physics.add.collider(this.plateforme_mobile, objects);
-     this.physics.add.collider(this.pnj, this.plateforme_mobile);
- 
-     /****************************
-     *  EVENEMENT DE LIBERATION  *
-     ****************************/
-     this.physics.add.overlap(this.pnj, this.plateforme_mobile, () => {
-       if (!this.plateforme_mobile.body.touching.down) {
-         this.pnj.setImmovable(false);
-         this.pnj.body.allowGravity = true;
-       }
-     });
-   
+    this.physics.add.collider(this.pnj, objects);
+    this.physics.add.collider(this.plateforme_mobile, objects);
+    this.physics.add.collider(this.pnj, this.plateforme_mobile);
+
+    /****************************
+    *  EVENEMENT DE LIBERATION  *
+    ****************************/
+    this.physics.add.overlap(this.pnj, this.plateforme_mobile, () => {
+      if (!this.plateforme_mobile.body.touching.down) {
+        this.pnj.setImmovable(false);
+        this.pnj.body.allowGravity = true;
+      }
+    });
+
+  /*****************************************************
+     *  AJOUT PORTE EXIT *
+  ******************************************************/
+
+  this.porte_retour = this.physics.add.staticSprite(3172, 290, "img_PorteSortie");
+
+  }
+
+
+  /****************************
+    *  EVENEMENT DE LIBERATION  *
+    ****************************/
+  collectCle(player, cle) {
+    cle.destroy();
+    this.tween_mouvement.resume();
   }
 
   update() {
@@ -138,7 +177,6 @@ export default class Abeille extends Phaser.Scene {
       left: Phaser.Input.Keyboard.KeyCodes.Q, //Touche Q pour aller à gauche
       right: Phaser.Input.Keyboard.KeyCodes.D, //Touche D pour aller à droite
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
-      act: Phaser.Input.Keyboard.KeyCodes.A,
     });
 
     if (this.keys.left.isDown) {
@@ -167,19 +205,24 @@ export default class Abeille extends Phaser.Scene {
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
 
-    if (this.keys.act.isDown) {
-      if (this.physics.overlap(this.player, this.levier)) {
-        if (this.levier.active == true) {
-          this.levier.active = false; // on désactive le levier
-          this.levier.flipX = false; // permet d'inverser l'image
-          this.tween_mouvement.pause();  // on stoppe le tween
-        }
-        // sinon :  on l'active et stoppe la plateforme
-        else {
-          this.levier.active = true; // on active le levier 
-          this.levier.flipX = true; // on tourne l'image du levier
-          this.tween_mouvement.resume();  // on relance le tween
-        }
+    if (!this.pnj_active && !this.physics.overlap(this.pnj, this.plateforme_mobile)) {
+      this.pnj_active = true;
+    }
+
+    if (this.pnj_active) {
+      let distance = Phaser.Math.Distance.Between(this.pnj.x, this.pnj.y, this.player.x, this.player.y);
+      let vitesseX = distance > 100 ? (this.player.x - this.pnj.x) * 0.2 : (this.player.x - this.pnj.x) * 0.05;
+      this.pnj.setVelocityX(vitesseX);
+      this.pnj.setVelocityY(Math.sin(this.time.now / 200) * 30);
+      this.player.x > this.pnj.x ? this.pnj.resetFlip() : this.pnj.setFlipX(true);
+    }
+
+    if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
+      if (this.physics.overlap(this.player, this.porte_retour)) {
+        this.game.config.fromPeche=true;
+        this.game.config.x = 1600;
+        this.game.config.y = 1600;
+        this.scene.start("General");
       }
     }
   }
