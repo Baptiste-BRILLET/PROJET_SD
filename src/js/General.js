@@ -90,7 +90,9 @@ export default class General extends Phaser.Scene {
 
     // Image Crabe
     this.load.image("img_crabe", "src/assets/Riviere/Crabe.png");
-    this.load.image("message_crabe", "src/assets/Quete/QueteX.png");
+    this.load.image("questImage9", "src/assets/Quete/QueteX.png");
+    this.load.image("playButton9", "src/assets/Quete/Continue2.png"); // Bouton Play 9
+    this.load.image("quitButton9", "src/assets/Quete/Exit9.png"); // Bouton Quit 9
   }
 
   /***********************************************************************/
@@ -424,18 +426,18 @@ export default class General extends Phaser.Scene {
     quit.setVisible(false);
   }
 
-  hideQuestUV(imageQ, ctn) {
-    imageQ.setVisible(false);
-    ctn.setVisible(false);
-  }
 
   hideCrabShowImage(player, crabe) {
     crabe.destroy(); // Supprime le crabe après la collision
-    this.physics.add.sprite(2600, 2000, "message_crabe").setVisible(true); // Affiche le message
-    this.continueButton2 = this.add.image(2600, 2200, "playButton4").setVisible(true).setInteractive();
-
-    this.continueButton2.on("pointerdown", () => {
-      this.hideQuestUV(this.imageQ, this.ctn); // Cache l'interface
+    this.questImage9 = this.add.image(2600, 2000, "questImage9").setVisible(true).setInteractive();
+    this.playButton9 = this.add.image(2600, 2180, "playButton9").setVisible(true).setInteractive();
+    this.quitButton9 = this.add.image(2600, 2000, "playButton9").setVisible(false).setInteractive();
+    
+    this.playButton9.on("pointerdown", () => {
+      this.hideQuestUI(this.questImage9, this.playButton9, this.quitButton9); // Cache l'interface
+    });
+    this.quitButton9.on("pointerdown", () => {
+      this.hideQuestUI(this.questImage9, this.playButton9, this.quitButton9); // Cache l'interface
     });
   }
   /***********************************************************************/
