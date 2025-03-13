@@ -23,11 +23,11 @@ var PNJMairie;
 var PNJ_Maire;
 var porte_retour;
 var plateforme_mobile;
-var levier;
 var tween_mouvement;
 var boutonFeu;
 var groupeBullets;
 var objetsFlottants;
+var crabe;
 
 // définition de la classe "selection"
 export default class General extends Phaser.Scene {
@@ -68,21 +68,25 @@ export default class General extends Phaser.Scene {
 
 
     //Image Quetes
+    this.load.image("questImage0", "src/assets/Quete/Quete0.png"); // Image de la quête 1
     this.load.image("questImage1", "src/assets/Quete/Quete1.png"); // Image de la quête 1
     this.load.image("questImage2", "src/assets/Quete/Quete2.png"); // Image de la quête 2
     this.load.image("questImage3", "src/assets/Quete/Quete3.png"); // Image de la quête 3
     this.load.image("questImage4", "src/assets/Quete/Quete4.png"); // Image de la quête 4
+    this.load.image("playButton0", "src/assets/Quete/Play0.png"); // Bouton Play 0
     this.load.image("playButton1", "src/assets/Quete/Play1.png"); // Bouton Play 1
     this.load.image("playButton2", "src/assets/Quete/Play2.png"); // Bouton Play 2
     this.load.image("playButton3", "src/assets/Quete/Play3.png"); // Bouton Play 3
     this.load.image("playButton4", "src/assets/Quete/Play4.png"); // Bouton Play 4
+    this.load.image("quitButton0", "src/assets/Quete/Exit0.png"); // Bouton Quit 0
     this.load.image("quitButton1", "src/assets/Quete/Exit1.png"); // Bouton Quit 1
     this.load.image("quitButton2", "src/assets/Quete/Exit2.png"); // Bouton Quit 2
     this.load.image("quitButton3", "src/assets/Quete/Exit3.png"); // Bouton Quit 3
     this.load.image("quitButton4", "src/assets/Quete/Exit4.png"); // Bouton Quit 4
 
-
-
+    // Image Crabe
+    this.load.image("img_crabe", "src/assets/Riviere/Crabe.png");
+    this.load.image("message_crabe", "src/assets/Quete/MessageCrabe.png");
   }
 
   /***********************************************************************/
@@ -297,7 +301,7 @@ export default class General extends Phaser.Scene {
     PNJ_4 = this.physics.add.sprite(1750, 1150, "img_PNJ_4");
     PNJ_6 = this.physics.add.sprite(2250, 2000, "img_PNJ_6");
     PNJ_5 = this.physics.add.sprite(700, 1700, "img_PNJ_5");
-    PNJ_6 = this.physics.add.sprite(1320, 1400, "img_PNJ_6");
+    PNJ_6 = this.physics.add.sprite(1540, 1020, "img_PNJ_6");
     PNJMairie = this.physics.add.sprite(1460, 1780, "img_PNJ3");
 
 
@@ -315,6 +319,22 @@ export default class General extends Phaser.Scene {
     this.physics.add.collider(player, objects);
     this.cameras.main.roundPixels = true;
 
+     /*****************************************************
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ (Début) *
+     ******************************************************/
+
+    // Création de l'image de quête, invisible par défaut
+    this.questImage0 = this.add.image(2150, 1400, "questImage0").setVisible(false);
+    this.playButton0 = this.add.image(2080, 1480, "playButton0").setVisible(false).setInteractive();
+    this.quitButton0 = this.add.image(2190, 1480, "quitButton0").setVisible(false).setInteractive();
+
+    this.playButton0.on("pointerdown", () => {
+      this.hideQuestUI(this.questImage0, this.playButton0, this.quitButton0); // Cache l'interface
+    });
+    this.quitButton0.on("pointerdown", () => {
+      this.hideQuestUI(this.questImage0, this.playButton0, this.quitButton0); // Cache l'interface
+    });
+
     /*****************************************************
      *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ (Maire) *
      ******************************************************/
@@ -331,8 +351,9 @@ export default class General extends Phaser.Scene {
       this.hideQuestUI(this.questImage1, this.playButton1, this.quitButton1); // Cache l'interface
     });
 
+  
     /*****************************************************
-     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ (Pacheur) *
+     *  GESTION DES INTERATIONS ENTRE  PERSO ET PNJ (Pecheur) *
      ******************************************************/
 
     // Création de l'image de quête, invisible par défaut
@@ -352,14 +373,14 @@ export default class General extends Phaser.Scene {
      ******************************************************/
 
     // Création de l'image de quête, invisible par défaut
-    this.questImage3 = this.add.image(900, 1500, "questImage3").setVisible(false);
+    this.questImage3 = this.add.image(900, 1150, "questImage3").setVisible(false);
     this.playButton3 = this.add.image(830, 1230, "playButton3").setVisible(false).setInteractive();
     this.quitButton3 = this.add.image(940, 1230, "quitButton3").setVisible(false).setInteractive();
 
     //On ne veux pas changer de scène mais juste afficher en plus un élément sur la map
     this.playButton3.on("pointerdown", () => {
-      this.physics.add.sprite(1600, 1600, "img_crabe");
-      this.hideQuestUI(this.questImage3, this.playButton3, this.quitButton3); // Cache l'interface
+      this.crabe = this.physics.add.sprite(2640, 2510, "img_crabe").setVisible(true);
+      this.hideQuestUI(this.questImage3, this.playButton3, this.quitButton3);
     });
     this.quitButton3.on("pointerdown", () => {
       this.hideQuestUI(this.questImage3, this.playButton3, this.quitButton3); // Cache l'interface
@@ -397,9 +418,10 @@ export default class General extends Phaser.Scene {
     play.setVisible(false);
     quit.setVisible(false);
   }
+
   /***********************************************************************/
   /** FONCTION UPDATE 
-/***********************************************************************/
+  /***********************************************************************/
 
   update() {
 
@@ -462,18 +484,10 @@ export default class General extends Phaser.Scene {
     if (this.physics.overlap(player, PNJ_Miel)) {
       this.showQuestUI(this.questImage4, this.playButton4, this.quitButton4);
     }
+    
 
-    if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
-      if (this.physics.overlap(player, this.porte1))
-        this.scene.switch("niveau1");
-      if (this.physics.overlap(player, this.porte2))
-        this.scene.switch("niveau2");
-      if (this.physics.overlap(player, this.porte3))
-        this.scene.switch("niveau3");
-    }
   }
 }
-
 /***********************************************************************/
 /** CONFIGURATION GLOBALE DU JEU ET LANCEMENT 
 /***********************************************************************/
