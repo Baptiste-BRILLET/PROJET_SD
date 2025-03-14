@@ -70,7 +70,7 @@ export default class Abeille extends Phaser.Scene {
     this.player = this.physics.add.sprite(100, 235, "img_perso");
     this.player.setSize(16, 16); // Réduit la hitbox à 16x16
     this.player.setOffset(16, 16); // Ajuste si besoin pour centrer
-    this.player.refreshBody();
+    this.player.refreshBody(); //Met à jours le body du joueur
     this.player.setBounce(0.2); // on donne un petit coefficient de rebond
     this.player.setCollideWorldBounds(true); // le player se cognera contre les bords du monde
 
@@ -87,14 +87,25 @@ export default class Abeille extends Phaser.Scene {
     });
 
     this.pnj = this.physics.add.sprite(2780, 150, "img_bees");
+    // Joue l'animation "fly" en boucle pour le PNJ
     this.pnj.anims.play("fly", true);
 
-    // Par défaut, elle ne bouge pas (bloquée dans la cage)
+    // Par défaut, le PNJ est immobile (car il est enfermé dans la cage)
     this.pnj.setVelocity(0, 0);
-    this.pnj.body.allowGravity = false; // Elle flotte
-    this.pnj_active = false; // Indique si elle est libérée
-    this.pnj.setImmovable(true);
+
+    // Désactive la gravité pour éviter qu'il tombe
     this.pnj.body.allowGravity = false;
+
+    // Initialise une variable pour indiquer si le PNJ est actif/libéré ou non
+    this.pnj_active = false;
+
+    // Rend le PNJ immobile (ne réagit pas aux collisions)
+    this.pnj.setImmovable(true);
+
+    // (Redondance) Désactive encore la gravité (déjà fait plus haut)
+    this.pnj.body.allowGravity = false;
+
+    // Empêche le PNJ de sortir des limites du monde
     this.pnj.setCollideWorldBounds(true);
 
     /***********************
@@ -113,22 +124,27 @@ export default class Abeille extends Phaser.Scene {
     /****************************
     *  CREATION DE LA CAGE MOBILE *
     ****************************/
+    // Création de la plateforme mobile (img_cage) à une position initiale (2780, 170)
     this.plateforme_mobile = this.physics.add.sprite(2780, 170, "img_cage");
+
+    // Désactive la gravité pour que la plateforme ne tombe pas
     this.plateforme_mobile.body.allowGravity = false;
+
+    // Rend la plateforme immobile face aux autres objets (elle ne bougera que via les animations ou le code)
     this.plateforme_mobile.body.immovable = true;
 
+    // Création d'une animation (tween) pour déplacer la plateforme
     this.tween_mouvement = this.tweens.add({
-      targets: [this.plateforme_mobile],
-      paused: true,
-      ease: "Linear",
-      duration: 2000,
-      yoyo: false,
-      y: "-=160",
-      hold: 1000,
-      repeatDelay: 1000,
-      repeat: 0
+      targets: [this.plateforme_mobile], // L'élément à animer (la plateforme)
+      paused: true, // L'animation est mise en pause au départ (elle ne démarre pas automatiquement)
+      ease: "Linear", // Déplacement avec une vitesse constante (pas d'accélération ou de ralentissement)
+      duration: 2000, // Temps que met la plateforme pour se déplacer (2 secondes)
+      yoyo: false, // La plateforme ne fait pas d'aller-retour automatique
+      y: "-=160", // Déplacement de 160 pixels vers le haut
+      hold: 1000, // Temps d'attente de 1 seconde une fois arrivé à destination
+      repeatDelay: 1000, // Temps d'attente avant qu'un autre cycle de répétition commence
+      repeat: 0 // Nombre de répétitions (0 = une seule exécution)
     });
-
     /****************************
    *  CLE POUR LEVER LA CAGE *
    ****************************/
@@ -139,25 +155,32 @@ export default class Abeille extends Phaser.Scene {
     /****************************
     *  COLLISIONS *
     ****************************/
+    // Ajoute une collision entre le PNJ et les objets du monde
     this.physics.add.collider(this.pnj, objects);
+
+    // Ajoute une collision entre la plateforme mobile et les objets du monde
     this.physics.add.collider(this.plateforme_mobile, objects);
+
+    // Ajoute une collision entre le PNJ et la plateforme mobile
     this.physics.add.collider(this.pnj, this.plateforme_mobile);
 
     /****************************
     *  EVENEMENT DE LIBERATION  *
     ****************************/
+    // Ajoute une détection de chevauchement entre le PNJ et la plateforme mobile
     this.physics.add.overlap(this.pnj, this.plateforme_mobile, () => {
+      // Vérifie si la plateforme mobile n'est pas touchée par le bas (c'est-à-dire que le PNJ n'est pas debout dessus)
       if (!this.plateforme_mobile.body.touching.down) {
-        this.pnj.setImmovable(false);
-        this.pnj.body.allowGravity = true;
+        this.pnj.setImmovable(false); // Rend le PNJ mobile
+        this.pnj.body.allowGravity = true; // Active la gravité pour le PNJ
       }
     });
 
-  /*****************************************************
-     *  AJOUT PORTE EXIT *
-  ******************************************************/
+    /*****************************************************
+       *  AJOUT PORTE EXIT *
+    ******************************************************/
 
-  this.porte_retour = this.physics.add.staticSprite(3172, 290, "img_PorteSortie");
+    this.porte_retour = this.physics.add.staticSprite(3172, 290, "img_PorteSortie");
 
   }
 
@@ -205,21 +228,33 @@ export default class Abeille extends Phaser.Scene {
     // ancrage de la caméra sur le joueur
     this.cameras.main.startFollow(this.player);
 
+    // Vérifie si le PNJ est inactif et s'il ne chevauche pas la plateforme mobile
     if (!this.pnj_active && !this.physics.overlap(this.pnj, this.plateforme_mobile)) {
-      this.pnj_active = true;
+      this.pnj_active = true; // Active le PNJ s'il est inactif et hors de la plateforme
     }
 
+    // Si le PNJ est actif, il commence à suivre le joueur
     if (this.pnj_active) {
+      // Calcul de la distance entre le PNJ et le joueur
       let distance = Phaser.Math.Distance.Between(this.pnj.x, this.pnj.y, this.player.x, this.player.y);
+
+      // Détermine la vitesse horizontale du PNJ en fonction de la distance au joueur
+      // Si la distance est grande (> 100px), il accélère, sinon il ralentit pour un suivi plus fluide
       let vitesseX = distance > 100 ? (this.player.x - this.pnj.x) * 0.2 : (this.player.x - this.pnj.x) * 0.05;
+
+      // Applique la vitesse horizontale calculée au PNJ
       this.pnj.setVelocityX(vitesseX);
+
+      // Applique un léger mouvement vertical sinusoïdal pour donner un effet de flottement
       this.pnj.setVelocityY(Math.sin(this.time.now / 200) * 30);
+
+      // Change l'orientation du sprite du PNJ pour toujours regarder vers le joueur
       this.player.x > this.pnj.x ? this.pnj.resetFlip() : this.pnj.setFlipX(true);
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
       if (this.physics.overlap(this.player, this.porte_retour)) {
-        this.game.config.fromPeche=true;
+        this.game.config.fromPeche = true;
         this.game.config.x = 1600;
         this.game.config.y = 1600;
         this.scene.start("General");

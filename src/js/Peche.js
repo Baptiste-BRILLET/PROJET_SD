@@ -89,48 +89,77 @@ export default class Peche extends Phaser.Scene {
     /***********************
      *  CREATION DE LA RIVIERE 
      ************************/
+    // Création d'un événement récurrent (timer) qui appelle la fonction spawnFloatingObject toutes les 2 secondes
     this.timer = this.time.addEvent({
-      delay: 2000,
-      loop: true,
-      callback: this.spawnFloatingObject,
-      callbackScope: this
+      delay: 2000, // Délai entre chaque exécution (2 secondes)
+      loop: true, // L'événement se répète indéfiniment
+      callback: this.spawnFloatingObject, // Fonction appelée
+      callbackScope: this // Contexte dans lequel la fonction est exécutée (this fait référence à la scène)
     });
 
-
+    // Initialisation du score
     this.score = 0;
+
+    // Création et affichage du texte du score à l'écran
     this.scoreText = this.add.text(500, 10, "Score: 0", {
-      fontSize: "20px",
-      fill: "#fff",
-      padding: { x: 10, y: 5 }
+      fontSize: "20px", // Taille de la police
+      fill: "#fff", // Couleur du texte (blanc)
+      padding: { x: 10, y: 5 } // Ajout d'un padding pour améliorer la lisibilité
     });
 
+    // Le texte du score reste fixe sur l'écran (ne bouge pas avec la caméra)
     this.scoreText.setScrollFactor(0);
+
+    // S'assure que le texte du score est affiché au premier plan
     this.scoreText.setDepth(1000);
 
+    // Définition des limites de la caméra et du monde du jeu
+    this.cameras.main.setBounds(0, 0, 640, 640); // La caméra peut se déplacer dans un monde de 640x640 pixels
+    this.physics.world.setBounds(0, 0, 640, 640); // Définition des limites physiques du monde
 
-    this.cameras.main.setBounds(0, 0, 640, 640);
-    this.physics.world.setBounds(0, 0, 640, 640);
+    // La caméra suit le joueur avec un léger effet de retard pour un mouvement fluide
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
   }
 
+  /***********************
+  *  CREATION spawnFloatingObject
+  ************************/
   spawnFloatingObject() {
+    // Liste des objets possibles
     const objets = ["Poisson", "Encre", "SacP", "Crabe", "EtoileJ", "Poubelle"];
+
+    // Sélection aléatoire d'un objet parmi la liste
     const typeObjet = Phaser.Utils.Array.GetRandom(objets);
 
+    // Position verticale aléatoire pour l'apparition de l'objet
     const yPosition = Phaser.Math.Between(245, 380);
+
+    // Création de l'objet flottant en dehors de l'écran, à gauche
     const objet = this.objetsFlottants.create(-50, yPosition, typeObjet);
 
+    // Définition de sa vitesse vers la droite
     objet.setVelocityX(50);
+
+    // Réduction de sa taille
     objet.setScale(0.5);
   }
 
+  /***********************
+  *  CREATION Tirer
+  ************************/
   tirer() {
-    const bulletSpeed = 300;
+    const bulletSpeed = 300; // Vitesse du projectile
+
+    // Création du projectile à la position actuelle du joueur
     const bullet = this.groupeBullets.create(this.player.x, this.player.y, "bullet");
 
+    // Permet au projectile de sortir de l'écran sans collision avec les limites du monde
     bullet.setCollideWorldBounds(false);
+
+    // Réduction de la taille du projectile
     bullet.setScale(0.5);
 
+    // Détermine la direction du tir en fonction de la dernière direction enregistrée
     switch (this.lastDirection) {
       case "right":
         bullet.setVelocityX(bulletSpeed);
@@ -147,21 +176,30 @@ export default class Peche extends Phaser.Scene {
     }
   }
 
+  /***********************
+  *  CREATION detruireObjet
+  ************************/
   detruireObjet(bullet, objet) {
-    bullet.destroy();
-    objet.destroy();
+    bullet.destroy(); // Suppression du projectile
+    objet.destroy(); // Suppression de l'objet touché
 
+    // Liste des objets ayant un impact négatif sur le score
     const objetsNegatifs = ["Poisson", "Crabe", "EtoileJ"];
 
+    // Mise à jour du score en fonction de l'objet touché
     if (objetsNegatifs.includes(objet.texture.key)) {
-      this.score -= 3;
+      this.score -= 3; // Pénalité pour certains objets
     } else {
-      this.score += 1;
+      this.score += 1; // Récompense pour les autres
     }
 
+    // Mise à jour de l'affichage du score
     this.scoreText.setText("Score: " + this.score);
   }
 
+  /***********************************************************************/
+  /** FONCTION UPDATE
+  /***********************************************************************/
   update() {
     this.player.setVelocity(0);
 
