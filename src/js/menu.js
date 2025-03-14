@@ -18,7 +18,7 @@ export default class menu extends Phaser.Scene {
       .setDepth(0);
 
     //on ajoute un bouton de clic, nommé bouton_play
-    var bouton_play = this.add.image(150, 450, "imageBoutonPlay").setDepth(1);
+    var bouton_play = this.add.image(160, 450, "imageBoutonPlay").setDepth(1);
    
     //=========================================================
     //on rend le bouton interratif

@@ -151,7 +151,7 @@ export default class Peche extends Phaser.Scene {
     bullet.destroy();
     objet.destroy();
 
-    const objetsNegatifs = ["Encre", "Poubelle"];
+    const objetsNegatifs = ["Poisson", "Crabe", "EtoileJ"];
 
     if (objetsNegatifs.includes(objet.texture.key)) {
       this.score -= 3;

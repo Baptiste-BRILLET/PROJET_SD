@@ -331,8 +331,8 @@ export default class General extends Phaser.Scene {
 
     // Création de l'image de quête, invisible par défaut
     this.questImage0 = this.add.image(1400, 1000, "questImage0").setVisible(false);
-    this.playButton0 = this.add.image(1330, 1120, "playButton0").setVisible(false).setInteractive();
-    this.quitButton0 = this.add.image(1440, 1120, "quitButton0").setVisible(false).setInteractive();
+    this.playButton0 = this.add.image(1330, 1080, "playButton0").setVisible(false).setInteractive();
+    this.quitButton0 = this.add.image(1440, 1080, "quitButton0").setVisible(false).setInteractive();
 
     this.playButton0.on("pointerdown", () => {
       this.hideQuestUI(this.questImage0, this.playButton0, this.quitButton0); // Cache l'interface
