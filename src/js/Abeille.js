@@ -20,6 +20,10 @@ export default class Abeille extends Phaser.Scene {
     });
   }
 
+  init() {
+    this.pnj_active = false; // Réinitialisation de l'état de l'abeille
+  }
+  
   create() {
     this.physics.world.gravity.y = 300;
     const CarteAbeille = this.add.tilemap("carteAbeille");
