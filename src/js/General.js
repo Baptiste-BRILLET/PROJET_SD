@@ -385,7 +385,7 @@ export default class General extends Phaser.Scene {
 
     //On ne veux pas changer de scène mais juste afficher en plus un élément sur la map
     this.playButton3.on("pointerdown", () => {
-      crabe = this.physics.add.sprite(2600, 2000, "img_crabe");
+      crabe = this.physics.add.sprite(2650, 2520, "img_crabe");
       this.physics.add.overlap(player, crabe, this.hideCrabShowImage, null, this);
       this.hideQuestUI(this.questImage3, this.playButton3, this.quitButton3);
     });
@@ -429,8 +429,8 @@ export default class General extends Phaser.Scene {
 
   hideCrabShowImage(player, crabe) {
     crabe.destroy(); // Supprime le crabe après la collision
-    this.questImage9 = this.add.image(2600, 2000, "questImage9").setVisible(true).setInteractive();
-    this.playButton9 = this.add.image(2600, 2180, "playButton9").setVisible(true).setInteractive();
+    this.questImage9 = this.add.image(2650, 2520, "questImage9").setVisible(true).setInteractive();
+    this.playButton9 = this.add.image(2650, 2700, "playButton9").setVisible(true).setInteractive();
     this.quitButton9 = this.add.image(2600, 2000, "playButton9").setVisible(false).setInteractive();
     
     this.playButton9.on("pointerdown", () => {
